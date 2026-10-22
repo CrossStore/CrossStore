@@ -1,24 +1,25 @@
 {
   "schema": 1,
   "id": "airpage",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "name": {
     "en": "AirPage",
     "zh": "AirPage"
   },
   "description": {
-    "en": "AirPage",
-    "zh": "AirPage"
+    "en": "Send images with a QR code, keep a history, receive live updates and set sleep wallpaper.",
+    "zh": "扫码传图、历史图片、实时接收与休眠壁纸。"
   },
   "license": "MIT",
   "runtime": "crossmux-lua54",
-  "api": 1,
+  "api": 3,
   "entry": "main.lua",
-  "memory_bytes": 65536,
+  "memory_bytes": 131072,
   "requires": [
-    "wifi"
+    "wifi",
+    "psram"
   ],
-  "status": "porting",
+  "status": "ready",
   "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/airpage",
   "assets": [
     "assets/icon-g2-32.bin",
@@ -29,6 +30,9 @@
     "assets/icon-g16-96.bin"
   ],
   "permissions": [
-    "network"
+    "network",
+    "device_info",
+    "wallpaper",
+    "keep_awake"
   ]
 }

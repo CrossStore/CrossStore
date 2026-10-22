@@ -89,5 +89,13 @@ class CatalogTest(unittest.TestCase):
             manifest=catalog.validate(json.loads(path.read_text()),path.parent)
             if manifest['status']=='ready': catalog.make_package(path.parent,manifest)
 
+    def test_api3_permissions_require_api3(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder, manifest = self.package(Path(temporary))
+            manifest.update(api=2, permissions=['files_export', 'keep_awake'])
+            with self.assertRaises(ValueError): catalog.validate(manifest, folder)
+            manifest['api']=3
+            catalog.validate(manifest, folder)
+
 
 if __name__ == '__main__': unittest.main()

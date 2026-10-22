@@ -8,7 +8,7 @@
 
 | 字段 | 当前约束 |
 | --- | --- |
-| schema / api | schema=1，应用 api 为 1 或 2；目录外层 api=1 保持静态格式兼容 |
+| schema / api | schema=1，应用 api 为 1、2 或 3；目录外层 api=1 保持静态格式兼容 |
 | id | `[a-z][a-z0-9_]{0,30}`，与包目录相同 |
 | version | 三段数字版本号 |
 | runtime | `crossmux-lua54` |
@@ -24,8 +24,10 @@
 
 `.csp` 是不压缩的 ZIP：清单不超过 4 KiB，Lua 源码不超过 32 KiB，整个包不超过 1 MiB、32 个文件。禁止预编译 Lua 字节码。可选资源必须列在 `assets` 并位于 `assets/` 子目录；API 2 可读取有界资源，图标按约定文件名加载。
 
-权限名称为 `network`、`radio`、`notifications`、`background`、`reading_data`、`wallpaper`、`sound`、`device_info`。能力表示设备提供什么，权限表示用户允许应用做什么；两者分别展示。wallpaper 当前预留，尚无修改壁纸 API。内存声明超过 64 KiB 必须同时要求 psram。每台设备由商店最多安装 64 个包，更新已有包不计入新增。
+权限名称为 `network`、`radio`、`notifications`、`background`、`reading_data`、`wallpaper`、`sound`、`device_info`、`files_export`、`keep_awake`。能力表示设备提供什么，权限表示用户允许应用做什么；两者分别展示。API 3 的 AirPage 服务需要 wallpaper 才能设置休眠壁纸；files_export 允许在 `/CrossStore/<应用ID>/` 导出 SVG；keep_awake 允许前台应用阻止自动休眠，退出时失效。内存声明超过 64 KiB 必须同时要求 psram。每台设备由商店最多安装 64 个包，更新已有包不计入新增。
 
 图标源文件在各包 `icons/` 中，包含彩色母版和不同分辨率的预处理 PNG。安装资源为 32/64 px 的 2/4 灰阶和 32/96 px 的 16 灰阶 `.bin`，低灰阶大图采用预处理抖动。启动器选择设备所需版本；没有图标则使用通用图形。
 
 下载写入临时文件，设备核对长度、SHA-256、内部清单和入口，才替换已安装包。替换期间保留 `.previous` 以恢复被中断的安装。此机制不能保证抵御存储介质损坏。
+
+固件会跳过高于自身 API 版本的目录条目，继续读取同页其他应用和下一页；旧固件仍可更新其支持的包，不会尝试执行 API 3 应用。

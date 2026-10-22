@@ -1,6 +1,6 @@
-# Lua API 2（实验）
+# Lua API 3（实验）
 
-`main.lua` 返回回调表。API 2 保留 API 1 的列表接口，并增加画布、权限检查与系统服务。
+`main.lua` 返回回调表。API 3 保留 API 1/2 接口，增加点阵、图片呈现、文件导出和前台网络服务。应用需声明它实际使用的最低 API 版本。
 
 ```lua
 return {
@@ -57,7 +57,7 @@ return {
 | `app.measure(text,maxWidth,font=1)` | 返回实际主题字体的排版宽高；text 最多 255 UTF-8 字节 |
 | `app.button(id,x,y,w,h,label,style=0)` | style：0 描边、1 平面、2 浅灰、3 黑底 |
 | `app.hit(id,x,y,w,h)` | 不绘制的交互区域，常用于棋盘 |
-| `app.qr(x,y,size,text)` | 一帧一个二维码；固定版本 5/M、最多 96 字节，包含四模块留白 |
+| `app.qr(x,y,size,text)` | 一帧一个二维码；固定版本 5/M、API 2 最多 96，API 3 最多 384 字节，包含四模块留白 |
 
 每帧最多 512 条绘制命令、8192 字节文本、24 个交互区域。交互 ID 不重复，区域不得重叠或越界；相邻控件至少保留 6 px 间隔。棋盘使用一个区域，再在 Lua 中计算格子。画布命令保存在宿主约 20 KiB 的活动缓冲中，绘制任务不执行 Lua。
 
@@ -104,3 +104,35 @@ return {
 仅开放基础库、table、string、math、utf8 的受限子集。没有 io、os、package、debug、coroutine；禁用动态加载、pcall/xpcall、collectgarbage、string.dump 和模式匹配系列函数。不能使用套接字或访问任意存储路径。
 
 每个回调最多 100000 条 Lua 指令或约 100 毫秒。VM 配额为 16–128 KiB；超过 64 KiB 必须声明 psram。具备 PSRAM 的宿主将 VM 分配放到 PSRAM，失败不自动挤占内部堆。配额不含宿主画布、图标、协议服务与网络缓冲；这些各有独立上限。超限停止应用并报告错误。这是开发预览的故障隔离措施，尚未完成安全审计。
+
+## API 3：绘图、时钟与文件
+
+- `app.raster(x,y,w,h,sourceWidth,sourceHeight,shades)`：每个源像素一个大写十六进制字符 `0..F`，行优先。源宽高各 1–128，总字节最多 8191，并与其他文字共用画布 8192 字节额度。按设备主题灰阶显示；它不是额外的全屏缓冲区。
+- `app.system("canvas.export", basename)`：需要 files_export。排队导出当前图形到 `/CrossStore/<id>/<basename>.svg`，单个应用最多 32 个文件。basename 遵循包 ID 字符规则。完成回调 `on_export(success, path)`。忽略按钮与点击区；暂不支持 QR 和 raster 导出。文本为 SVG 系统字体，布局不保证与设备字体逐像素一致。
+- `app.system("power.keep_awake", "on"/"off")`：开启需要 keep_awake；仅在本应用前台有效。它不是低功耗休眠，也不启用后台 Lua。
+- `app.system("device.sync")`：需要 network，异步校时。缺少连接时打开系统 Wi-Fi 选择器，返回 false/connecting；应用在 `on_network(1)` 后重新请求。`device.sync_status` 返回是否结束，text 为 success/failed，15 秒超时。释放应用自己开启的 Wi-Fi，并保留已获授权的聊天后台收听。
+- QR 最多 384 UTF-8 字节；宿主按长度选择 QR 版本。必须预留至少每模块 2 像素及四模块静区。
+
+## API 3：前台网络服务
+
+以下命令通过 `app.system(command, argument, index)` 调用，返回仍为 `ok,text,a,b,c,extra`。每个应用同时只能持有一种前台服务。网络步骤在 Lua 回调之间执行，不计入 Lua 的 100 毫秒执行窗口；退出或脚本失败后释放服务。没有后台 Lua 定时器。`on_service()` 通知应用查询新状态；`on_tick` 可以轮询有界快照。图片显示时用 `on_image` 处理点击，`on_back` / `on_swipe` 仍由 Lua 决定。
+
+### 公共像素画布
+
+需要 network；首次 `pixel.start`，后续 `pixel.status` 返回连接状态、a=画面版本、b=待发点数、c=限速剩余毫秒。`pixel.row` 的 index 为 0–99，返回 60 个灰阶字符。`pixel.place` 的 argument 为 0–3（白到黑），index 为显示坐标 `y*60+x`。两秒合并发送、每十秒最多十点；断线回滚待发点，新快照会重放本地尚未发送的修改。数据使用原有公共 MQTT 协议；应用应清楚说明内容将公开共享。
+
+### AirPage
+
+需要 network + device_info；`airpage.start` 初始化已有设备 ID 与缓存。`airpage.status`：text=状态，a=本页历史数，b=版本，c=当前是否显示全屏图片。`airpage.url` 返回上传链接；`airpage.fetch` 请求最新图片；`airpage.live` 的 on/off 控制前台实时接收，on 还需 keep_awake。
+
+`airpage.history` 按本页 1 起始下标返回归档编号及宽高；`airpage.page` 的 first/next/previous 切换每页 20 条的历史。`airpage.show` 的 index=0 显示当前图片，1–20 显示历史；`airpage.hide` 回到 Lua 页面。图片完整解码并显示成功后才提交待定缓存，失败恢复旧图。此显示器复用固件的原生 16 灰阶或 4 灰阶图片通路。`airpage.wallpaper` 需要 wallpaper，使用当前选中图片设置休眠壁纸。
+
+### 微信读书
+
+需要 network + reading_data；`weread.start` 初始化本机已有账户与书架。服务不向 Lua 暴露 Cookie 或密钥。`weread.status`：text 为 idle/disclaimer/connecting/busy/qr/range/done/error，a=书籍数，b=版本，c=原生错误码。`weread.accept` 保存既有使用说明的接受状态。
+
+`weread.sync` 同步书架并按需扫码登录；`weread.qr` 按 index=0/1/2 返回每段 192 字节的登录链接；`weread.book` 按 1 起始下标返回书名、a=已有本地书、extra=作者。`weread.fetch_detail` 获取详情，`weread.detail` 返回字数/评分/简介长度/出版社；`weread.intro` 按字节偏移读取最多 192 字节、保持 UTF-8 边界的简介。
+
+`weread.download` 的 index=书籍，argument 使用 images/no_images，可附加 range。range 状态下 `weread.chapter_count`、`weread.chapter`（0 起始）读取目录，`weread.range` 以 `first:last` 选择闭区间。`weread.progress` 返回标题、已完成/总数/阶段。`weread.cancel` 取消；`weread.open` 打开已有本地书籍，阅读和进度同步仍属核心阅读器。`weread.logout` 退出账户，应用应先让用户确认。
+
+这些适配器保留原有全局 AirPage 身份/微信读书账户，不提供多个第三方应用的独立账户空间。它们是受权限控制的现有服务桥接，不是通用 HTTP、MQTT 或任意文件访问接口。

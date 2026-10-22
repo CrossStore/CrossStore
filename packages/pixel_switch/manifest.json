@@ -1,22 +1,25 @@
 {
   "schema": 1,
   "id": "pixel_switch",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "name": {
     "en": "Pixel Switch",
     "zh": "像素开关"
   },
   "description": {
-    "en": "Pixel Switch",
-    "zh": "像素开关"
+    "en": "A shared public pixel canvas with four shades, live updates and a touch palette.",
+    "zh": "四阶灰度公共像素画布，实时同步，点选位置后落笔。"
   },
   "license": "MIT",
   "runtime": "crossmux-lua54",
-  "api": 1,
+  "api": 3,
   "entry": "main.lua",
-  "memory_bytes": 65536,
-  "requires": [],
-  "status": "porting",
+  "memory_bytes": 131072,
+  "requires": [
+    "wifi",
+    "psram"
+  ],
+  "status": "ready",
   "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/pixel_switch",
   "assets": [
     "assets/icon-g2-32.bin",
@@ -26,5 +29,8 @@
     "assets/icon-g16-32.bin",
     "assets/icon-g16-96.bin"
   ],
-  "permissions": []
+  "permissions": [
+    "network",
+    "keep_awake"
+  ]
 }

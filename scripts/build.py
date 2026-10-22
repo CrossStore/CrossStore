@@ -11,7 +11,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 CAPABILITIES = {"wifi", "lora", "esp_now", "tox", "imu", "touch", "frontlight", "rtc", "psram", "storage", "buzzer", "audio"}
-PERMISSIONS = {"network", "radio", "notifications", "background", "reading_data", "wallpaper", "sound", "device_info"}
+PERMISSIONS = {"network", "radio", "notifications", "background", "reading_data", "wallpaper", "sound", "device_info", "files_export", "keep_awake"}
 ID = re.compile(r"[a-z][a-z0-9_]{0,30}\Z")
 VERSION = re.compile(r"(?:0|[1-9][0-9]{0,4})\.(?:0|[1-9][0-9]{0,4})\.(?:0|[1-9][0-9]{0,4})\Z")
 MAX_PACKAGE = 1024 * 1024
@@ -24,8 +24,8 @@ def json_bytes(value):
 
 
 def validate(manifest, folder):
-    if manifest.get("schema") != 1 or manifest.get("api") not in (1, 2):
-        raise ValueError("schema must be 1, API must be 1 or 2")
+    if manifest.get("schema") != 1 or manifest.get("api") not in (1, 2, 3):
+        raise ValueError("schema must be 1, API must be 1, 2 or 3")
     ident = manifest.get("id", "")
     if not ID.fullmatch(ident) or ident != folder.name:
         raise ValueError("invalid package ID/directory")
@@ -42,6 +42,8 @@ def validate(manifest, folder):
     permissions = manifest.get("permissions", [])
     if not isinstance(permissions, list) or len(permissions) != len(set(permissions)) or not set(permissions) <= PERMISSIONS:
         raise ValueError("unknown or duplicate permission")
+    if manifest['api'] < 3 and set(permissions) & {'files_export', 'keep_awake'}:
+        raise ValueError("file export and awake permissions require API 3")
     if memory > 65536 and "psram" not in requires:
         raise ValueError("VM budgets above 64 KiB require PSRAM")
     if manifest.get("status") not in {"ready", "porting", "source-library"}:
@@ -124,7 +126,9 @@ def build(packages, output):
         (output / ("index.json" if page == 0 else f"page-{page + 1}.json")).write_bytes(raw)
     (output / "migration.json").write_bytes(json_bytes(migration))
     (output / ".nojekyll").write_text("")
-    print(f"Built {len(rows)} runnable universal packages; {len(migration) - len(rows)} source packages awaiting migration.")
+    pending = sum(item["status"] == "porting" for item in migration)
+    libraries = sum(item["status"] == "source-library" for item in migration)
+    print(f"Built {len(rows)} runnable universal packages; {pending} awaiting migration; {libraries} shared source libraries.")
     return rows
 
 

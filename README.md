@@ -16,11 +16,13 @@ CrossMux 的实验性应用商店。设备通过 HTTP/HTTPS 获取静态 JSON �
 | woodfish | 木鱼计数、蜂鸣器短音、独立静音开关 |
 | buddy / reading_stats | 保留设备对应宠物；读取系统已有阅读统计 |
 | rf_chat / wifi_chat / esp_chat | Lua 聊天页面、发现、气泡、重试、通知入口；使用固件通信服务 |
+| avatar / standby | Lua 随机头像与 SVG 导出；大字钟面、月历与农历 |
+| pixel_switch / airpage / weread | 公共像素画布；扫码传图与历史图片；微信读书书架、登录与离线下载 |
 | library / file_transfer / opds | 核心书库、文件传输、OPDS 的快捷入口 |
 
-以上 API 2 应用需要新版运行时固件。Apps 首页显示已安装应用，应用商店是其中一个入口；图标网格跟随用户设置，不再因 Mono 主题而强制使用列表。目录地址、硬件信息和应用权限集中在商店设置。
+avatar、standby、pixel_switch、airpage、weread 使用 API 3，其余应用使用 API 2，均需要对应版本或更新的运行时固件。Apps 首页显示已安装应用，应用商店是其中一个入口；图标网格跟随用户设置，不再因 Mono 主题而强制使用列表。目录地址、硬件信息和应用权限集中在商店设置。
 
-其他应用的原始 C++ 源码保存在各包 `native/`，`ORIGIN.json` 记录来源。avatar、standby、pixel_switch、airpage、weread 仍标记为 `porting`，不发布安装包；`chat_common` 是公共源码。原生代码仍供传统固件使用，尚未全部移除。原生游戏存档尚未迁移；聊天身份和历史继续使用原服务文件。Lua 中国象棋使用轻量 AI，数独当前提供固定难度的合法变换题库，不等同于原生应用的全部功能。
+其他应用的原始 C++ 源码保存在各包 `native/`，`ORIGIN.json` 记录来源。21 个入口均有可安装 Lua 包；`chat_common` 是公共源码，不单独安装。商店固件的应用入口转向 Lua；原生 C++ 界面源码仍供传统固件使用，协议、图片解码、下载和系统阅读服务保留在固件。原生游戏存档尚未迁移；聊天身份和历史继续使用原服务文件。Lua 中国象棋使用轻量 AI，数独当前提供固定难度的合法变换题库，不等同于原生应用的全部功能。头像改为 SVG 导出；待机时钟目前保持唤醒、按分钟刷新，未移植 C3 的轻睡眠策略。微信读书提供书架、详情、章节范围和离线下载，在线边读边取、缓存管理、封面墙仍需后续完善。详见 [迁移与验收](docs/migration.md)。
 
 ## 包与兼容性
 
@@ -45,3 +47,5 @@ python3 -m http.server 8080 --directory dist
 提交新应用请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。运行时 API 仍处于实验阶段，见 [Lua API](docs/lua-api.md)。
 
 本项目沿用原始源码许可证，各应用保留各自的版权和许可证信息。目录中的 `status: ready` 表示可以打包安装，不代表所有设备都已通过实机验收。
+
+图标母版和预处理资源位于各包 `icons/`；三个聊天图标用内置 image_gen 生成，原始提示词保存在各自 `icons/generation.json`。运行 `python3 scripts/prepare_icons.py packages/rf_chat` 可重新生成该包的 32/48/64/96/128 px 彩色及 2/4/16 灰阶文件（需要 Pillow），低灰阶 64 px 及以上保留直接量化和抖动两种版本。

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "rf_chat",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "name": {
     "en": "rf_chat",
     "zh": "rf_chat"
@@ -25,5 +25,13 @@
     "radio",
     "notifications",
     "background"
+  ],
+  "assets": [
+    "assets/icon-g16-32.bin",
+    "assets/icon-g16-96.bin",
+    "assets/icon-g2-32.bin",
+    "assets/icon-g2-64.bin",
+    "assets/icon-g4-32.bin",
+    "assets/icon-g4-64.bin"
   ]
 }

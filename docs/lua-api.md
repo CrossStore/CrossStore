@@ -51,7 +51,7 @@ return {
 | 接口 | 参数 |
 | --- | --- |
 | `app.box(x,y,w,h,gray=0,radius=0,stroke=0)` | stroke=0 填充，否则绘制边框 |
-| `app.circle(x,y,w,h,gray=0,stroke=0)` | 圆形/圆角胶囊；用相同宽高画圆 |
+| `app.circle(x,y,w,h,gray=0,reserved=0,stroke=0)` | 圆形/圆角胶囊；用相同宽高画圆 |
 | `app.line(x,y,w,h,gray=0,reverse=0,stroke=1)` | 正宽高包围盒的对角线；reverse=1 从左下到右上 |
 | `app.text(x,y,w,h,text,font=1,align=0,gray=0)` | font：0 小字、1 正文、2 标题、3 大数字；align：0 左、1 中、2 右 |
 | `app.measure(text,maxWidth,font=1)` | 返回实际主题字体的排版宽高；text 最多 255 UTF-8 字节 |

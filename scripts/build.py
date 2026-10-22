@@ -10,7 +10,8 @@ import shutil
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-CAPABILITIES = {"wifi", "lora", "esp_now", "tox", "imu", "touch", "frontlight", "rtc", "psram", "storage"}
+CAPABILITIES = {"wifi", "lora", "esp_now", "tox", "imu", "touch", "frontlight", "rtc", "psram", "storage", "buzzer", "audio"}
+PERMISSIONS = {"network", "radio", "notifications", "background", "reading_data", "wallpaper", "sound", "device_info"}
 ID = re.compile(r"[a-z][a-z0-9_]{0,30}\Z")
 VERSION = re.compile(r"(?:0|[1-9][0-9]{0,4})\.(?:0|[1-9][0-9]{0,4})\.(?:0|[1-9][0-9]{0,4})\Z")
 MAX_PACKAGE = 1024 * 1024
@@ -23,8 +24,8 @@ def json_bytes(value):
 
 
 def validate(manifest, folder):
-    if manifest.get("schema") != 1 or manifest.get("api") != 1:
-        raise ValueError("schema and API must be 1")
+    if manifest.get("schema") != 1 or manifest.get("api") not in (1, 2):
+        raise ValueError("schema must be 1, API must be 1 or 2")
     ident = manifest.get("id", "")
     if not ID.fullmatch(ident) or ident != folder.name:
         raise ValueError("invalid package ID/directory")
@@ -33,11 +34,16 @@ def validate(manifest, folder):
     if manifest.get("runtime") != "crossmux-lua54" or manifest.get("entry") != "main.lua":
         raise ValueError("unsupported runtime or entry")
     memory = manifest.get("memory_bytes")
-    if type(memory) is not int or not 16384 <= memory <= 65536:
-        raise ValueError("memory_bytes must be 16384..65536")
+    if type(memory) is not int or not 16384 <= memory <= 131072:
+        raise ValueError("memory_bytes must be 16384..131072")
     requires = manifest.get("requires")
     if not isinstance(requires, list) or len(requires) != len(set(requires)) or not set(requires) <= CAPABILITIES:
         raise ValueError("unknown or duplicate capability")
+    permissions = manifest.get("permissions", [])
+    if not isinstance(permissions, list) or len(permissions) != len(set(permissions)) or not set(permissions) <= PERMISSIONS:
+        raise ValueError("unknown or duplicate permission")
+    if memory > 65536 and "psram" not in requires:
+        raise ValueError("VM budgets above 64 KiB require PSRAM")
     if manifest.get("status") not in {"ready", "porting", "source-library"}:
         raise ValueError("invalid migration status")
     for key, limit in (("name", 95), ("description", 191)):

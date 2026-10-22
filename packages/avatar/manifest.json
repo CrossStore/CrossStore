@@ -17,5 +17,14 @@
   "memory_bytes": 65536,
   "requires": [],
   "status": "porting",
-  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/avatar"
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/avatar",
+  "assets": [
+    "assets/icon-g2-32.bin",
+    "assets/icon-g2-64.bin",
+    "assets/icon-g4-32.bin",
+    "assets/icon-g4-64.bin",
+    "assets/icon-g16-32.bin",
+    "assets/icon-g16-96.bin"
+  ],
+  "permissions": []
 }

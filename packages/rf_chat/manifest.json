@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "rf_chat",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": {
     "en": "rf_chat",
     "zh": "rf_chat"
@@ -12,12 +12,18 @@
   },
   "license": "MIT",
   "runtime": "crossmux-lua54",
-  "api": 1,
+  "api": 2,
   "entry": "main.lua",
-  "memory_bytes": 65536,
+  "memory_bytes": 131072,
   "requires": [
-    "lora"
+    "lora",
+    "psram"
   ],
-  "status": "porting",
-  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/rf_chat"
+  "status": "ready",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/rf_chat",
+  "permissions": [
+    "radio",
+    "notifications",
+    "background"
+  ]
 }

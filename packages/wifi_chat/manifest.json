@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "wifi_chat",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": {
     "en": "wifi_chat",
     "zh": "wifi_chat"
@@ -12,13 +12,19 @@
   },
   "license": "MIT",
   "runtime": "crossmux-lua54",
-  "api": 1,
+  "api": 2,
   "entry": "main.lua",
-  "memory_bytes": 65536,
+  "memory_bytes": 131072,
   "requires": [
     "wifi",
-    "tox"
+    "tox",
+    "psram"
   ],
-  "status": "porting",
-  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/wifi_chat"
+  "status": "ready",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/wifi_chat",
+  "permissions": [
+    "network",
+    "notifications",
+    "background"
+  ]
 }

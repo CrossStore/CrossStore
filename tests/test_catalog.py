@@ -72,6 +72,18 @@ class CatalogTest(unittest.TestCase):
             self.assertEqual((len(first['packages']), len(second['packages'])), (16,1))
             self.assertEqual(second['next'],'')
 
+    def test_api2_permissions_and_psram_budget(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder, manifest = self.package(Path(temporary))
+            manifest.update(api=2, memory_bytes=131072, requires=['psram'], permissions=['sound'])
+            catalog.validate(manifest, folder)
+            manifest['requires'] = []
+            with self.assertRaises(ValueError): catalog.validate(manifest, folder)
+            manifest['requires'] = ['psram']
+            for bad in (['unknown'], ['sound','sound'], 'sound'):
+                manifest['permissions'] = bad
+                with self.assertRaises(ValueError): catalog.validate(manifest, folder)
+
     def test_all_submitted_manifests(self):
         for path in (ROOT/'packages').glob('*/manifest.json'):
             manifest=catalog.validate(json.loads(path.read_text()),path.parent)

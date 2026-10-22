@@ -17,5 +17,6 @@
   "memory_bytes": 65536,
   "requires": [],
   "status": "source-library",
-  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/chat_common"
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/chat_common",
+  "permissions": []
 }

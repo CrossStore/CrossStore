@@ -8,19 +8,24 @@
 
 | 字段 | 当前约束 |
 | --- | --- |
-| schema / api | 均为 1 |
+| schema / api | schema=1，应用 api 为 1 或 2；目录外层 api=1 保持静态格式兼容 |
 | id | `[a-z][a-z0-9_]{0,30}`，与包目录相同 |
 | version | 三段数字版本号 |
 | runtime | `crossmux-lua54` |
 | entry | `main.lua` |
-| memory_bytes | 16384–65536，Lua VM 的分配限额，不包含固件 UI 和传输开销 |
+| memory_bytes | 16384–131072，Lua VM 的分配限额，不包含固件 UI 和传输开销 |
 | name / description | 含 en、zh；各语言 UTF-8 字节数分别不超过 95 / 191 |
 | requires | 必需能力名称数组，不允许重复或未知能力 |
+| permissions | 应用声明的权限；安装时明确授权，商店设置可逐项撤销 |
 | status | ready、porting、source-library；后两者不发布可安装包 |
 | license | 许可证标识，包内必须包含 LICENSE |
 
-能力名称：`wifi`、`lora`、`esp_now`、`tox`、`imu`、`touch`、`frontlight`、`rtc`、`psram`、`storage`。既包含硬件，也包含固件提供的接口。能力检查不等同于测试当前网络连通性。
+能力名称：`wifi`、`lora`、`esp_now`、`tox`、`imu`、`touch`、`frontlight`、`rtc`、`psram`、`storage`、`buzzer`、`audio`。既包含硬件，也包含固件提供的接口。能力检查不等同于测试当前网络连通性。
 
-`.csp` 是不压缩的 ZIP：清单不超过 4 KiB，Lua 源码不超过 32 KiB，整个包不超过 1 MiB、32 个文件。禁止预编译 Lua 字节码。可选资源必须列在 `assets` 并位于 `assets/` 子目录；目前固件尚未提供通用资源绘制 API。
+`.csp` 是不压缩的 ZIP：清单不超过 4 KiB，Lua 源码不超过 32 KiB，整个包不超过 1 MiB、32 个文件。禁止预编译 Lua 字节码。可选资源必须列在 `assets` 并位于 `assets/` 子目录；API 2 可读取有界资源，图标按约定文件名加载。
+
+权限名称为 `network`、`radio`、`notifications`、`background`、`reading_data`、`wallpaper`、`sound`、`device_info`。能力表示设备提供什么，权限表示用户允许应用做什么；两者分别展示。wallpaper 当前预留，尚无修改壁纸 API。内存声明超过 64 KiB 必须同时要求 psram。每台设备由商店最多安装 64 个包，更新已有包不计入新增。
+
+图标源文件在各包 `icons/` 中，包含彩色母版和不同分辨率的预处理 PNG。安装资源为 32/64 px 的 2/4 灰阶和 32/96 px 的 16 灰阶 `.bin`，低灰阶大图采用预处理抖动。启动器选择设备所需版本；没有图标则使用通用图形。
 
 下载写入临时文件，设备核对长度、SHA-256、内部清单和入口，才替换已安装包。替换期间保留 `.previous` 以恢复被中断的安装。此机制不能保证抵御存储介质损坏。

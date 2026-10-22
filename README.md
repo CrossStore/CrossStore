@@ -25,7 +25,7 @@ CrossMux 的实验性应用商店。设备通过 HTTP/HTTPS 获取静态 JSON �
 
 元信息声明 `runtime`、`api`、`memory_bytes` 和硬件依赖 `requires`。例如 `requires: ["wifi", "lora", "storage"]`。商店展示依赖，并在安装和启动时检查设备能力；未知依赖拒绝处理。当前能力名称见 [包协议](docs/protocol.md)。
 
-安装包保存在卡上的 `/.crosspoint/apps/`，独立应用数据保存在 `/.crosspoint/appdata/<id>/`。卸载保留数据。SHA-256 用于完整性校验；目前没有发布者数字签名，安装源的可信性取决于用户选择的商店和 HTTPS 连接。
+安装包保存在卡上的 `/.crosspoint/apps/`，独立应用数据保存在 `/.crosspoint/appdata/<id>/`。卸载保留数据。SHA-256 用于完整性校验。目前没有发布者数字签名，而且预览固件沿用的下载接口尚未启用 HTTPS 服务端证书校验；摘要不能验证发布者或防止目录与包同时被替换。当前版本用于受控测试，发布前仍需完善下载信任机制。
 
 ## 构建与托管
 

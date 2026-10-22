@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "opds",
+  "version": "0.1.0",
+  "name": {
+    "en": "OPDS",
+    "zh": "网络书库"
+  },
+  "description": {
+    "en": "OPDS",
+    "zh": "网络书库"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 1,
+  "entry": "main.lua",
+  "memory_bytes": 65536,
+  "requires": [
+    "wifi"
+  ],
+  "status": "ready",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/opds",
+  "kind": "core-shortcut"
+}

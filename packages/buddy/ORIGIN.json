@@ -1,0 +1,13 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/buddy",
+  "files": {
+    "BuddyActivity.cpp": "f3b28fd21b107f054cfe257995ed454efa5eecadedf1f17f66e5cb86216ba519",
+    "BuddyActivity.h": "f0011fbe846c358cddf32d1855a66bee152fb174113fa078b979dd28da0af12b",
+    "BuddyGenerator.cpp": "110e8b0b0b62666f4a0074dc65804de84907c3c1b9a35c736e7645f26898804e",
+    "BuddyGenerator.h": "37d3b343057917223d1987e557537331407d8218c4ae2700cd7933b299b03512",
+    "LICENSE": "41dfce33348b189e780fd12cf20816fef967fbb7a2557b98dbb30b98ef7f5dc1"
+  }
+}

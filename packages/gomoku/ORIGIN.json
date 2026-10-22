@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/gomoku",
+  "files": {
+    "GomokuAI.cpp": "0a1336e7a94978f64018216cfbadda4f20bae799333be91b532ccf9801867eef",
+    "GomokuAI.h": "6a99cd92ac528362bfaeaa27320b32f5caa677d343b0501668f0f7d22955f30e",
+    "GomokuBoard.cpp": "da7b21b5c79e002941bed33fa48aec8832702814af905f1f89f82e4f1b22aadf",
+    "GomokuBoard.h": "7c3be2c37f528b6a8408d69662614e5df5f0774598a3c9d73c2dd37933570aa3",
+    "GomokuGameActivity.cpp": "e473a2c121bd1f625814ff968ff71317e71f8dddf2e365e58038de5bd86c1efa",
+    "GomokuGameActivity.h": "5f9a966f17bc8c7c6e04a513b20907988d407558455e850b1cb13e239f0192e6",
+    "GomokuMenuActivity.cpp": "912b8ac1a01152b2a3bb8170d8133689ccb86eb7af56cb6f009752cf2ff67b05",
+    "GomokuMenuActivity.h": "e3c4e6f3266c64bf1562022e1e28be39dd9e0adf02f5306ee08e57756583132c",
+    "GomokuStore.cpp": "467d6e182424a6c794d2eeefb255e662186317c9ba13fd7194ba848a37d7f91a",
+    "GomokuStore.h": "b210c543678b9059ba262532f3fc6fe20c2db4ae2ebf90171f6fbf0488206c8a"
+  }
+}

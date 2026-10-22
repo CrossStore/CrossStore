@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "id": "esp_chat",
+  "version": "0.1.0",
+  "name": {
+    "en": "esp_chat",
+    "zh": "esp_chat"
+  },
+  "description": {
+    "en": "esp_chat",
+    "zh": "esp_chat"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 1,
+  "entry": "main.lua",
+  "memory_bytes": 65536,
+  "requires": [
+    "esp_now"
+  ],
+  "status": "porting",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/esp_chat"
+}

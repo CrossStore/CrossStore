@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "calculator",
+  "version": "0.1.0",
+  "name": {
+    "en": "Calculator",
+    "zh": "计算器"
+  },
+  "description": {
+    "en": "Calculator",
+    "zh": "计算器"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 1,
+  "entry": "main.lua",
+  "memory_bytes": 65536,
+  "requires": [],
+  "status": "ready",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/calculator"
+}

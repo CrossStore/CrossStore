@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "sudoku",
+  "version": "0.1.0",
+  "name": {
+    "en": "Sudoku",
+    "zh": "数独"
+  },
+  "description": {
+    "en": "Sudoku",
+    "zh": "数独"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 1,
+  "entry": "main.lua",
+  "memory_bytes": 65536,
+  "requires": [],
+  "status": "porting",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/sudoku"
+}

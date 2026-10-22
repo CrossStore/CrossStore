@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "minesweeper",
+  "version": "0.1.0",
+  "name": {
+    "en": "Minesweeper",
+    "zh": "扫雷"
+  },
+  "description": {
+    "en": "Minesweeper",
+    "zh": "扫雷"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 1,
+  "entry": "main.lua",
+  "memory_bytes": 65536,
+  "requires": [],
+  "status": "porting",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/minesweeper"
+}

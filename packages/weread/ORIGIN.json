@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/weread",
+  "files": {
+    "README.md": "9f15e45e11419eecc7bf0164d1e7bbd70a4f2b8ca304a0c7cf5584dd2f680343",
+    "WeReadActivity.h": "9960774deae10730926e7916e20856c485d52456ef0c2114ef3b60cac6135fc8",
+    "WeReadBackend.h": "bd195bd4ca65afe572f9aa10d97fc246eda360a20a0346136ba45d172fe8a654",
+    "WeReadProgressContext.h": "1e44a164bc405242156acf8b0ec33d3a40716f4fb5c2f0f529cfcfb5ee61373f",
+    "WeReadProgressSyncActivity.h": "1cd094b12d77f553b2eb3a93e333c6133e1954b17dd8084635b37407b56789a8",
+    "WeReadTouchGeometry.h": "07e7a570b64c972ad7f11c24b6a2b3f795f8eb663ab7da961f57be0cd87923b8",
+    "webapi/WeReadActivity.cpp": "488ccbb2c5062947b279711f1f81f5433c80f0d40efce3217307b79ffb223862",
+    "webapi/WeReadActivity.h": "904661d131aa372d4adb01ed0b86615cbf1673c8fc7e8131533663b1b81eecb2",
+    "webapi/WeReadBrowseActivity.cpp": "7484ce00b3aaa413ecccbaedb542923ed56329fc39967cf9e30b004252924114",
+    "webapi/WeReadBrowseActivity.h": "57ace0fb5250a332480f02cdcd4daa14c1ed4bf95fda5609bd2b806e517a2585",
+    "webapi/WeReadProgressSyncActivity.cpp": "cd1973756822f23b96924a60b68d0589f3c4e41b47f4b539632b07d1843ed581",
+    "webapi/WeReadProgressSyncActivity.h": "64d7e91903c76eaa6ff56819c28bc46db3f395a15fdd4bb598cd414550d9106f"
+  }
+}

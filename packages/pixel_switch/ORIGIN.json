@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/pixel-switch",
+  "files": {
+    "PixelSwitchActivity.cpp": "32a2e3b96b9612de4870840b76b8c47b03479c463d259ae9dc568f37d6458e59",
+    "PixelSwitchActivity.h": "36a1ddfd8414f960b7ce6569f89c183d1429e8aa52bc54e7e35f8bcd9cd948be",
+    "PixelSwitchState.cpp": "e82e4dba519f41dbaf6fcbcc71e2585abe998f87d0c8dca5c65386783291b0c7",
+    "PixelSwitchState.h": "948aaef69b201d6c8c33958eddc06495c0c01b809b9fec0a81a8329296ce1393"
+  }
+}

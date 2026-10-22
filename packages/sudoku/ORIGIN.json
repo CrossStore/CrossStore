@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/sudoku",
+  "files": {
+    "SudokuBoard.cpp": "a4307d5684694d793200637d0726096afd37d8e20180a57a64652dfa61473c09",
+    "SudokuBoard.h": "54c115b5fb18df81cb39844a00d172957f4b54aab7f4d3c3ad2111da1d663667",
+    "SudokuGameActivity.cpp": "9ec8f8d4aaf86eca6ecd04d07269cf0319640dd7d2b77e013db929ca9d846d6c",
+    "SudokuGameActivity.h": "4b027369350a073344cd11032d34d19a1350d2db975fa10384dfa796802c6c66",
+    "SudokuGenerator.cpp": "b9a6ad30634309266127b0f6cd65c8f67092f331d15ca796e3676242280bcfcb",
+    "SudokuGenerator.h": "85d9954cec379ddbfc57119994605039b360b605c53dd8ad8bff1361bae5db4c",
+    "SudokuMenuActivity.cpp": "3a96213fe151c3349147bbfd1699c17272c2b1201a6087b89821cd6354c9ccdf",
+    "SudokuMenuActivity.h": "75350b117981464458c22659b02b444219ae2d6dcf6cf214f7b4403e707e70ed",
+    "SudokuStore.cpp": "e22754f82a7f937d0eee19e2255c1c0b7a5590a10fb7339dd746aefadf76ff19",
+    "SudokuStore.h": "6e4c31188bc5da550ef2568431d43f2f26abedc06a7fb63ba1d3f8d3a07957ba"
+  }
+}

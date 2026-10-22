@@ -1,0 +1,13 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/woodfish",
+  "files": {
+    "WoodfishActivity.cpp": "5e8377a0e207751da92d3dad9b2710784ff9f1fcd8e1afe12f3240c6c72ec3ae",
+    "WoodfishActivity.h": "78442da9535b6eb6a9190919167bbe19922bce2d5c3a136cb3cf47f526804a6b",
+    "WoodfishAssets.h": "7856ee69f396a1cf9fdc46cda36a514d773ffee98f24a57d6341ea13d460eb4e",
+    "WoodfishStore.cpp": "eaac70634778e38d7e0e35ffcfde724bb8e3a1236538979093c768c761d7f97e",
+    "WoodfishStore.h": "719fb4d3ccdadc14b91534c5c211c09c97124ff266b7b491238472f0414b058f"
+  }
+}

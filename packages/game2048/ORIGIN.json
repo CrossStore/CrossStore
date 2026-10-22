@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/2048",
+  "files": {
+    "Game2048Activity.cpp": "24e18c6f21752e68da59667760fe531f6a3836bdade8cf6a15fb2080bfc79eca",
+    "Game2048Activity.h": "5c22dc1d3a0739ec52d240fb0454f805faab7b05d5bfa82bbd0b7f1dca909670",
+    "Game2048Board.cpp": "089edbc122ed23eeef424dd37159d77ee5e327b4b411d0e8d2845857caa6bd23",
+    "Game2048Board.h": "c35bbcd91332d1b3946096dc9a36a8f093a129c1d0d56d150713e7fe71c32cde",
+    "Game2048Store.cpp": "91dfb8ed9f2e4a901d244b2e6586589d99e15b4a6f29f7510583d67ff919cf65",
+    "Game2048Store.h": "5742c769ed8c4fd3d4eec5bcbedfc2103b711d0bf891367680cdde4222aaf652"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/reading-stats",
+  "files": {
+    "AchievementsActivity.cpp": "73dc3a481d27966b9d546e2c2e3c2ce46a5e4f6e952f8ff97c9fbc31d787de50",
+    "AchievementsActivity.h": "23c7d48ff4cfbb669fe0ec248a6d4a8e9b909a64a5774fe1a8605fd343a336f6",
+    "AppMetricCard.cpp": "ca1fef801c112051b2ea6c59cef10f31c08ea2d7fa51f1257190b3b54047435d",
+    "AppMetricCard.h": "75e278b6b6db11f291a2951721c1b725eab4ef3760014a32f8e21ee615e139d7",
+    "BookReadingAdjustmentActivity.cpp": "37e4bc8abfe365c9ebcff1898da8bd9a367b4e898aa364776ddf25a43f441879",
+    "BookReadingAdjustmentActivity.h": "f8309da783c560a7b16427a914e4784bd84ffdfd4b0a32bab9a2fb08f63f2816",
+    "README.md": "a12df304dbbc7197a7408e3de329a86c61137de6f70c0d00c7e580fc61877660",
+    "ReadingDateSelectionActivity.cpp": "1b87b84edc192dca6fba8ba6db133df0264d2583e5f7f5c91691fe9ce773efaa",
+    "ReadingDateSelectionActivity.h": "2b73713c011bd98b4f7daf25b2cdf8a5d19bdf822c7b7409f3978d1b3c4f1a07",
+    "ReadingDayDetailActivity.cpp": "e375ea4f862e0a861bbe9dae3b4f69425b1f1cb57711903e1feef7085f667c27",
+    "ReadingDayDetailActivity.h": "4e5b5863ac89c762b49c92e25078a3461f428cbb0e05d1fbb3eb7f604fec0a83",
+    "ReadingHeatmapActivity.cpp": "41d153e977ac93701722d0a436bebcd6de0678d02b1522581b2612e8c1cdf4fa",
+    "ReadingHeatmapActivity.h": "6dc73e1cb661244e9f0a025000bc9a47e6ce1bcd6fc8105ce00524494493dc50",
+    "ReadingProfileActivity.cpp": "6e4fbb722441dea94531dd08356d557ec40b13c660b7c7ca7c97dd401baaa76c",
+    "ReadingProfileActivity.h": "7f1db7fbe49b9d184f1265642b46ce9edc0c78fd7c8fa8d61185dfd4bbf4ae40",
+    "ReadingStatsActivity.cpp": "bc4c03b2da4c47cf1d112e2c5e14a640e1d9c57adf495cbd602842b6e10c06c9",
+    "ReadingStatsActivity.h": "4611aa5b57294232d1d2fbf2eb49d5c499bf3a60ccd1a63ce5c0b2622f75fe91",
+    "ReadingStatsDetailActivity.cpp": "45afc6a12bade06f516354eb16be1745c6fd390463df66015e2f739e8db75ca8",
+    "ReadingStatsDetailActivity.h": "c977333def48d5edc36ee8190fccc549b8eee2da5277fc51a5e9b92f1f38cfbf",
+    "ReadingStatsExtendedActivity.cpp": "6ad9ec759a703840030263ae029fdc8a343c8fc7c4f9eeb09b1ce3557243ad0c",
+    "ReadingStatsExtendedActivity.h": "4ac17f9492e892839f33826802c24c6ce610988de4864ce805eb74d5b2546947",
+    "ReadingStatsMenuActivity.cpp": "79f34027eb0259d8461a315f7e8897aae319334e0c46520fb0f6674b876027e7",
+    "ReadingStatsMenuActivity.h": "ddd7932b75115dd7f57b57a59f23ffd7fcfb3e1e19611a58989aa19ddcd49cea"
+  }
+}

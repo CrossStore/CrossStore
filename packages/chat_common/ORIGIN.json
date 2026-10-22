@@ -1,0 +1,26 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/chat",
+  "files": {
+    "ChatActivity.cpp": "91a18666d9aa3d182a25d26cd065571af037e9cd04a5fae85c9995937543a78e",
+    "ChatActivity.h": "7558dad803a75dc631cfbcdc12e7d1d5324ee0acb0decdfd8a66568b1c88ba20",
+    "ChatModel.h": "a817b1a13eb02bdb8da2de7cceb7e6f8468874b199e9f0be55507b4571bf3763",
+    "ChatService.cpp": "69cf2ba766ec609dbd4afafb43b0036d26fd9367b5cb56ecc9200e602fbcc2de",
+    "ChatService.h": "9206e1d2238e887f523ea1b9c946651ed13bceeb4aa10fcb99bc44d7dfb3913b",
+    "ChatSession.cpp": "02d07da05d3135f000e4fa3c614fdf8a28422f463f72dc16c202e52f2f56c03e",
+    "ChatSession.h": "6f51d0993eb75c14ce1c0a95a345d4efc79d47f1a302b377ff170d4499a0ee5b",
+    "ChatStore.cpp": "d26b33c9081c286353041ad15fb969e422fb50030630366d02d17736d0525ddf",
+    "ChatStore.h": "4b318670fe79f9c78b62dd15a001755a298a60612416a9e3a564ba0515442c57",
+    "EspChatProtocol.h": "8e445289a37870e0dff89822c7ea11b0e83cc456a0c0453933809a5286fb1230",
+    "EspNowBackend.cpp": "e515beaa5bf8506a133beb47221856bc952e551bef6e64235f908564628ca9e5",
+    "EspNowBackend.h": "3f615dd527f8d4bac9faed10fd52f453cbb81312f171f9466642602899522003",
+    "RadioChatProtocol.h": "52e0a34dd9e10c094e8f5b204b476a3c8f1e7a64ad424f07e559a1ff75d0e632",
+    "RadioPresence.h": "6f9b16db614978028b88f549c66f237cc687a704c9caf6b17e2f6216a0f82d99",
+    "ToxBackend.cpp": "8941627e46013b5603e1d606ee2a4cbca6043ab6d5d3bf38b072af765709fb89",
+    "ToxBackend.h": "8dfc6a869db9d0cc2f730c8b952cf0f68e840e76116c1a93c5821d6992e2e1a1",
+    "WifiIdentityQr.h": "f6153ff95df6cb99267c630893b49e1191443c8fdeee6e96dd2647608787e5e8",
+    "WifiPeerDiscovery.h": "bc0fb98aabc086922f5cebb8974c38ad042a7d3a920f2e77be648d000c8e019f"
+  }
+}

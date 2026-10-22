@@ -1,0 +1,19 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/standby",
+  "files": {
+    "ChineseAlmanac.cpp": "e2ebaee5562100c43d61d004a4e7baa235ee56f55817cee6bfda7702fa84e5ca",
+    "ChineseAlmanac.h": "5e7fed6f989adcdd39a327e08b517a7cb332f6b511099458722317f40d9742eb",
+    "ChineseCalendarFace.cpp": "bf7564e19c7bebb6ae38a6b878a880e6b5f960cfb1f4e60bbbe15dee5d0dc32c",
+    "ChineseCalendarFace.h": "04d0818fdca2d104ca67d97fef7077cfc2be5c9cd920d3412bedc8af8e5f01d6",
+    "SloppyClockFace.cpp": "06ce350b4ab3b662e5b0172dd45890ec5841bd54593b44075e62fc8acb766546",
+    "SloppyClockFace.h": "759896b8e07fcd5645088fd9b18527dbf379a3e0ff1b31960e347415f3501122",
+    "StandbyActivity.cpp": "6bc18056a7356715f26e18a4392ce92f029d70ff557fcb12bb8218a364423b3e",
+    "StandbyActivity.h": "5f6346000c9105660fa8f7c44301e15b47c8ab5cab651c23d925086641e482bc",
+    "StandbyFace.h": "312793bac94f2a5378bf531f1d688ad96c4de16333707644efc0940f0ff8704f",
+    "StandbyTime.cpp": "540812cd507221b0e68f75ffb35f91e300a3d3e744194acf5346185ab85a817f",
+    "StandbyTime.h": "fc88b5dd8281426e2dba82511b344af566d431c53c140e4e98f03ea88a48c772"
+  }
+}

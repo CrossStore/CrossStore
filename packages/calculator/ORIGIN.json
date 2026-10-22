@@ -1,0 +1,13 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/calculator",
+  "files": {
+    "CalculatorActivity.cpp": "32d9f06a34ad1a5a82f10cff3b5becc37a054a2768039d2e361ff1228f3fb769",
+    "CalculatorActivity.h": "21fed7397bc617d6f8aa4bf5c67b4326d9057cdb0333b1097a6fa64038e9a94c",
+    "CalculatorFont.h": "d910a66b90bedb95e5a2eb27155c9d3c5763e030043c61771fcf8bf6d70738cd",
+    "CalculatorState.cpp": "3f1faa821604aad1a6767cef0981e4f71aeec77d6c6a77ee1adb6956c839f9bf",
+    "CalculatorState.h": "bce4fd904dfa009bb0382cfdc27e8260e57be5c8f76120451576d74c85534a30"
+  }
+}

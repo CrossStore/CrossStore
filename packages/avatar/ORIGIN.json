@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/avatar",
+  "files": {
+    "UglyAvatarActivity.cpp": "fa2f49e968e3992858cb9a1f992f3725c7483cc7d7b2e1bd3ba82c35febd571b",
+    "UglyAvatarActivity.h": "f0b683ee62637884e8785be3ebea5542469cda74a7d555c475b4c4f26516b969"
+  }
+}

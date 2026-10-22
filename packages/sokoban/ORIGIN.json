@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/sokoban",
+  "files": {
+    "SokobanBoard.cpp": "18f0cb6ccec0bb8d55cee6e78c4f2af6711bc7ca5eddd1310b4820cefdf4511a",
+    "SokobanBoard.h": "e5472b4125f3c5433ff4dd8734746d80e5c56d37f50e5cce443732e597344e91",
+    "SokobanGameActivity.cpp": "fa0bc9b84f14d665984adbfe60a12325d3e0e342215379e6d1350eeaeba49f05",
+    "SokobanGameActivity.h": "663a3d6ea6c6f58e99dca47a8153ac481bcc75c5aec60bcd7797336038d7b427",
+    "SokobanStore.cpp": "5a2b1c9f9d15d754ece67844a55a88775ee48a5f0338dfcaa7c230728a0723d4",
+    "SokobanStore.h": "d3399ce2808629c982ceb2899368c93e510d73b5f5a3dbd56fbf5eb6b09ae795",
+    "levels_data.h": "5611c7f7bb863d877cc28a20869d54377c9faa3fb19c395593856d34778baf19"
+  }
+}

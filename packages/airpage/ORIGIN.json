@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/airpage",
+  "files": {
+    "AirPageActivity.cpp": "0115cc6a4912a13e1afb4a719ae052702927d218482e874c22e993093da94e14",
+    "AirPageActivity.h": "04648d2314a04b5239e73d31865e3f131f0fe9007adff7005cb178ea48367130",
+    "AirPageConnection.cpp": "b277c18f237a2563f1b16df3037211bf8552afebc2dd108701c19fcb07618835",
+    "AirPageConnection.h": "37dc25199996acb51949b3f488ac8c56b2df879d20c88bfe89583b2f8760f4e4",
+    "AirPageDeviceId.cpp": "cc448793c579bf8779d97b84562acd9db15052e4adf5c007e5e565d59cf55a81",
+    "AirPageDeviceId.h": "05713ea369570a3e5a7faf37653ffc1fbf8befbf90462ceabd1f8cf96f91ca87",
+    "AirPageImageRenderer.cpp": "d9ade1fe40231f804a77d7f5a46020c8cd9651784b398840924876348c4e6ca2",
+    "AirPageImageRenderer.h": "2827f30c0408f8da771df4c12b4ff554f3f7fce843556fcb130fdc5c2a61b713",
+    "AirPageImageStore.cpp": "238902047a2c12a6a0b117d694cf078e382672dad4218f6fcb986f092f0c74b2",
+    "AirPageImageStore.h": "c3b80ac49b1ec2c61cf3d0d5d33d5614d46543930b1403e06f8e892e774bfb5e",
+    "AirPageWallpaper.cpp": "6132619f6404f10687a7ba254d368d05466aa61bee3f4a8e9e2b1b05d3e55591",
+    "AirPageWallpaper.h": "0741590bcff64424bb7a88402a37888212669491e3132209ba560e483dbff532"
+  }
+}

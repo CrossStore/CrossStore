@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/chinese-chess",
+  "files": {
+    "ChineseChessAI.cpp": "0161f07ef0a53576fcb694a48fd0c61edc553906d50434bd3ea416a4527ab996",
+    "ChineseChessAI.h": "3f5fbf41d64fd4fd371077cfd87b31f5f4fef15696fed05e1dc50c209e8fefc0",
+    "ChineseChessBoard.cpp": "891a14ca6493f8da3ca1a31c5a22b7a73f450b5d853df9bca7c9769f880259bd",
+    "ChineseChessBoard.h": "5905b804b173727403c71729a3b37e9e0b0055d68b7d33de1d1e7277de9235c4",
+    "ChineseChessGameActivity.cpp": "a9b0db815c6da6f0de69a3fe9f967167f1e9f42e10aa67c3b4561b513ddfbbbb",
+    "ChineseChessGameActivity.h": "3a9a62b82d81b242c915c9a9c282428a8b395ad2cd38b6994708836dbfa146f7",
+    "ChineseChessMenuActivity.cpp": "b0b446b1eba3d7a3ef84cddb5c9110ef62e82207c5480f807b2ccdcfc32dddaa",
+    "ChineseChessMenuActivity.h": "57383221710bb24d123ef5a2ca57559b44393bbf987b02701916b98797613ca4",
+    "ChineseChessStore.cpp": "807cab67e85fc8249edc686acb1781c88d072c9bcdd547cb70dcce51eaa24536",
+    "ChineseChessStore.h": "e708b65ec6cad0e5121ec85d7131ac8a38d047d39263c633b0fbc1bc37777e1c"
+  }
+}

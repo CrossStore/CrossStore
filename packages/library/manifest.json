@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "id": "library",
+  "version": "0.1.0",
+  "name": {
+    "en": "Library",
+    "zh": "书库"
+  },
+  "description": {
+    "en": "Library",
+    "zh": "书库"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 1,
+  "entry": "main.lua",
+  "memory_bytes": 65536,
+  "requires": [],
+  "status": "ready",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/library",
+  "kind": "core-shortcut"
+}

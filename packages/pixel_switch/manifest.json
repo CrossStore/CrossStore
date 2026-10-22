@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "pixel_switch",
+  "version": "0.1.0",
+  "name": {
+    "en": "Pixel Switch",
+    "zh": "像素开关"
+  },
+  "description": {
+    "en": "Pixel Switch",
+    "zh": "像素开关"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 1,
+  "entry": "main.lua",
+  "memory_bytes": 65536,
+  "requires": [],
+  "status": "porting",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/pixel_switch"
+}

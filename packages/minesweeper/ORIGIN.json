@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/0x1abin/crossmux",
+  "base_commit": "eaf5c73a71aaa03e372b6bc274923c2cc621a033",
+  "local_extensions": true,
+  "original_path": "src/activities/apps/minesweeper",
+  "files": {
+    "MinesweeperBoard.cpp": "c3b141f231cc3eea1b5e41127982afa966dceeea163ef40bd8213d9c429c0ec4",
+    "MinesweeperBoard.h": "284885df428f89ee9a9cfbf5d1ab9d72571278e5652cb8662d543be0303ce90f",
+    "MinesweeperGameActivity.cpp": "f13949b9c2c0ec84122cb30509644f7c02d00b84b2511db518fd200ddf424f60",
+    "MinesweeperGameActivity.h": "5da08c8c58d426de1445d89ac4a77efd70b89e16530dbf3e1f8b2c17b6bd5e29",
+    "MinesweeperGenerator.cpp": "35621364b0ecf2d85199a8be1b33322200893fb195a0c4166624cbb70f8239fd",
+    "MinesweeperGenerator.h": "c65db5144d7b137455311f476fa77118930d231a3250e3ee672c1fd9e62392d5",
+    "MinesweeperMenuActivity.cpp": "1ce58b57c1e7861b245986c761da52edf4c2f23fb4c8fc74e47bd200d27bf9c1",
+    "MinesweeperMenuActivity.h": "fe7a47fbb1c3ec063b7e9d353874d5890dcb14f36ff4001c6fd05939bcddc210",
+    "MinesweeperStore.cpp": "039132be9b69996e30cea0e45d7c07a4d9a382bc481253043fdb22b9a37519eb",
+    "MinesweeperStore.h": "42ec4eff33fe513e6b87bf216b7c5a74bd99dad881edf4199f14979aaaded11f"
+  }
+}

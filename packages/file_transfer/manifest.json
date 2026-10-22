@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "file_transfer",
+  "version": "0.1.0",
+  "name": {
+    "en": "File Transfer",
+    "zh": "文件传输"
+  },
+  "description": {
+    "en": "File Transfer",
+    "zh": "文件传输"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 1,
+  "entry": "main.lua",
+  "memory_bytes": 65536,
+  "requires": [
+    "wifi"
+  ],
+  "status": "ready",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/file_transfer",
+  "kind": "core-shortcut"
+}

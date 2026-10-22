@@ -1,0 +1,1 @@
+The existing protocol and shared UI sources are preserved in `../chat_common/native/`. This package owns the downloadable application; protocol services and hardware capability checks are provided by CrossMux.

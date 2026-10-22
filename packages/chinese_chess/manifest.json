@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "id": "chinese_chess",
+  "version": "0.1.0",
+  "name": {
+    "en": "Chinese Chess",
+    "zh": "中国象棋"
+  },
+  "description": {
+    "en": "Chinese Chess",
+    "zh": "中国象棋"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 1,
+  "entry": "main.lua",
+  "memory_bytes": 65536,
+  "requires": [],
+  "status": "porting",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/chinese_chess"
+}

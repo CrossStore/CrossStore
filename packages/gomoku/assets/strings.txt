@@ -1,0 +1,70 @@
+Easy
+简单
+Medium
+中等
+Hard
+困难
+Gomoku · Save failed
+五子棋 · 保存失败
+Gomoku
+五子棋
+Replace the current game?
+结束当前对局，开始新的一局？
+Cancel
+取消
+New game
+重新开始
+Next game
+下一局设置
+ · Board
+ · 棋盘
+Computer opponent
+人机对弈
+Two players
+双人对弈
+AI: 
+难度：
+You play black · First
+执黑先手
+You play white · Second
+执白后手
+Statistics
+对局记录
+Continue
+继续当前对局
+Start new game
+开始新对局
+Your record
+对局记录
+ games
+ 局
+Black / White / Draw: 
+黑胜 / 白胜 / 和棋：
+Fastest: 
+最快：
+No record
+暂无记录
+Back to game
+返回对局
+Black wins
+黑棋获胜
+White wins
+白棋获胜
+Draw
+和棋
+Thinking…
+正在思考…
+Black to play
+轮到黑棋
+White to play
+轮到白棋
+MOVE 
+第 
+ · 
+ 手 · 
+Undo
+悔棋
+New game
+新对局
+Options
+设置

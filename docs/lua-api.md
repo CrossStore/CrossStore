@@ -1,6 +1,6 @@
-# Lua API 4（实验）
+# Lua API 5（实验）
 
-`main.lua` 返回回调表。API 4 保留 API 1–3 接口，增加退出前的 `on_stop` 回调；API 3 提供点阵、图片呈现、文件导出和前台网络服务。应用需声明它实际使用的最低 API 版本。
+`main.lua` 返回回调表。API 5 保留 API 1–4 接口，增加阅读日期/成就与微信读书本地章节的只读查询。API 4 增加退出前的 `on_stop` 回调；API 3 提供点阵、图片呈现、文件导出和前台网络服务。应用需声明它实际使用的最低 API 版本。
 
 ```lua
 return {
@@ -103,6 +103,19 @@ API 4 的可选 `on_stop()` 在正常退出、返回主页、进入系统休眠�
 | reading.book | index 从 1 开始；text=书名、extra=作者、a=阅读毫秒、b=百分比、c=是否完成 |
 | reading.open | index 为书籍序号；交给核心阅读器继续阅读 |
 
+API 5 增加以下命令，均要求 `reading_data`，不写入或重建统计：
+
+| command | 入参 / 返回 |
+| --- | --- |
+| reading.calendar | argument 为空或 YYYY-MM；text=月份、a=月初日期序号、b=月内天数、c=参考日期序号；无可信时间且无日期历史时，空参数请求返回 false |
+| reading.date | index=日期序号；text=YYYY-MM-DD、a=日期序号、b=该日阅读毫秒 |
+| reading.date_book | argument=十进制日期序号（前缀 `-` 表示倒序），index=从 1 开始的书籍游标；a=匹配的书籍序号或 0、b=该书当天毫秒、c=下一游标或 0；单次最多扫描 32 本书，a=0 且 c 非零时应继续分页查询 |
+| reading.book_detail | index=书籍序号；text=章节名、a=阅读次数、b=上次阅读毫秒、c=章节进度百分比；extra 为首次/最近/完成日期，以 `\|` 分隔，未知日期留空 |
+| reading.achievements | a=成就总数、b=已解锁数、c=系统是否启用成就；关闭时数量为零 |
+| reading.achievement | index=从 1 开始的成就序号；text=本地化标题、a=系统指标类型、b=目标、c=是否解锁、extra=解锁日期；关闭成就时返回 false |
+
+日期序号沿用核心统计的本地日序，支持 1970–2106 年；书籍游标指向系统书籍表，不是日期内的排名。成就指标值取自固件的 `AchievementMetric` 枚举，客户端可以使用本地化标题和目标，不应据此伪造当前进度。
+
 ## 运行限制
 
 仅开放基础库、table、string、math、utf8 的受限子集。没有 io、os、package、debug、coroutine；禁用动态加载、pcall/xpcall、collectgarbage、string.dump 和模式匹配系列函数。不能使用套接字或访问任意存储路径。
@@ -140,5 +153,7 @@ VM 配额为 16–128 KiB；超过 64 KiB 必须声明 psram。具备 PSRAM 的�
 `weread.sync` 同步书架并按需扫码登录；`weread.qr` 按 index=0/1/2 返回每段 192 字节的登录链接；`weread.book` 按 1 起始下标返回书名、a=已有本地书、extra=作者。`weread.fetch_detail` 获取详情，`weread.detail` 返回字数/评分/简介长度/出版社；`weread.intro` 按字节偏移读取最多 192 字节、保持 UTF-8 边界的简介。
 
 `weread.download` 的 index=书籍，argument 使用 images/no_images，可附加 range。range 状态下 `weread.chapter_count`、`weread.chapter`（0 起始）读取目录，`weread.range` 以 `first:last` 选择闭区间。`weread.progress` 返回标题、已完成/总数/阶段。`weread.cancel` 取消；`weread.open` 打开已有本地书籍，阅读和进度同步仍属核心阅读器。`weread.logout` 退出账户，应用应先让用户确认。
+
+API 5 新增 `weread.cache`（index=从 1 开始的书架序号）：text=ready/missing/invalid，a=是否已有 EPUB，b=有效本地目录的章节数，c=保存的图片选项（0 含图、1 纯文字、-1 未知）。随后 `weread.cached_chapter` 按从 0 开始的章节序号返回 text=标题、a=章节文件是否存在、b=付费标记、c=字数。这两项仍受 network + reading_data 权限约束，但查询本身不联网、不下载、不删除文件；前台下载任务运行时不读取本地目录。一个章节文件存在不等于 EPUB 已生成或正文完整。
 
 这些适配器保留原有全局 AirPage 身份/微信读书账户，不提供多个第三方应用的独立账户空间。它们是受权限控制的现有服务桥接，不是通用 HTTP、MQTT 或任意文件访问接口。

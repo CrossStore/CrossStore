@@ -1,18 +1,18 @@
 {
   "schema": 1,
   "id": "reading_stats",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "name": {
     "en": "Reading Statistics",
     "zh": "阅读统计"
   },
   "description": {
-    "en": "Reading Statistics",
-    "zh": "阅读统计"
+    "en": "Reading totals, calendar heatmap, dated book history and achievements.",
+    "zh": "阅读统计、月历热力图、日期书单、书籍详情与成就。"
   },
   "license": "MIT",
   "runtime": "crossmux-lua54",
-  "api": 2,
+  "api": 5,
   "entry": "main.lua",
   "memory_bytes": 65536,
   "requires": [],

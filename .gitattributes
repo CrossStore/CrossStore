@@ -1,2 +1,5 @@
 *.bin binary
 *.png binary
+
+# These UI fragments intentionally retain trailing spaces for concatenation.
+packages/gomoku/assets/strings.txt whitespace=-blank-at-eol

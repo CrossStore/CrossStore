@@ -71,6 +71,18 @@ class CatalogTest(unittest.TestCase):
             second=json.loads((output/first['next']).read_text())
             self.assertEqual((len(first['packages']), len(second['packages'])), (16,1))
             self.assertEqual(second['next'],'')
+            self.assertEqual((first['page'], first['pages'], first['total'], first['previous']), (1, 2, 17, ''))
+            self.assertEqual((second['page'], second['pages'], second['total'], second['previous']), (2, 2, 17, 'index.json'))
+            self.assertTrue((output/second['previous']).is_file())
+
+    def test_last_page_count_and_backward_links(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)
+            for i in range(33): self.package(root, f'app_{i}')
+            output=root/'site'; catalog.build(root,output)
+            page=json.loads((output/'page-3.json').read_text())
+            self.assertEqual((page['page'], page['pages'], page['total'], len(page['packages'])), (3,3,33,1))
+            self.assertEqual(page['previous'], 'page-2.json')
 
     def test_api2_permissions_and_psram_budget(self):
         with tempfile.TemporaryDirectory() as temporary:

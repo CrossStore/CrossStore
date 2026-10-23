@@ -24,8 +24,8 @@ def json_bytes(value):
 
 
 def validate(manifest, folder):
-    if manifest.get("schema") != 1 or manifest.get("api") not in (1, 2, 3, 4):
-        raise ValueError("schema must be 1, API must be 1, 2, 3 or 4")
+    if manifest.get("schema") != 1 or manifest.get("api") not in (1, 2, 3, 4, 5):
+        raise ValueError("schema must be 1, API must be 1, 2, 3, 4 or 5")
     ident = manifest.get("id", "")
     if not ID.fullmatch(ident) or ident != folder.name:
         raise ValueError("invalid package ID/directory")
@@ -118,8 +118,10 @@ def build(packages, output):
         rows.append({**manifest, "artifact": f"packages/{filename}", "bytes": len(archive), "sha256": digest})
     pages = max(1, (len(rows) + PAGE_SIZE - 1) // PAGE_SIZE)
     for page in range(pages):
+        previous = "" if page == 0 else "index.json" if page == 1 else f"page-{page}.json"
         document = {"schema": 1, "api": 1, "packages": rows[page * PAGE_SIZE:(page + 1) * PAGE_SIZE],
-                    "next": f"page-{page + 2}.json" if page + 1 < pages else ""}
+                    "next": f"page-{page + 2}.json" if page + 1 < pages else "",
+                    "previous": previous, "page": page + 1, "pages": pages, "total": len(rows)}
         raw = json_bytes(document)
         if len(raw) > 24576:
             raise ValueError("catalog page exceeds device budget")

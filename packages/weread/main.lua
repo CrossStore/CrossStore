@@ -6,6 +6,7 @@ local ready,images,range=false,true,false
 local count,page,selected,revision=0,0,1,-1
 local book,author,publisher='', '', ''
 local words,rating,introSize=0,0,0
+local downloaded,cacheState,cacheCount,cachePage,savedImages=false,'missing',0,0,-1
 local progressKey,notice='', ''
 local first,last,chapterCount,chapterPage,choosing=0,0,0,0,'first'
 local introOffset,introNext,introStack=0,0,{}
@@ -30,6 +31,7 @@ local function shelfSize(w,h)
   local rows=math.max(1,math.min(3,math.floor((h-150)/158)))
   return columns,rows,columns*rows
 end
+local function cacheRows(h) return math.max(1,math.min(7,math.floor((h-208)/64))) end
 local function clip(text,bytes)
   local n=math.min(#text,bytes)
   while n>0 and n<#text and (text:byte(n+1)&0xc0)==0x80 do n=n-1 end
@@ -105,16 +107,52 @@ local function show()
     two(40,41,h-112,w,44,tr('Previous','上一页'),tr('Next','下一页'))
     app.button(42,0,h-56,w,48,tr('Back','返回'),0);return
   end
+  if view=='options' then
+    app.text(0,8,w,44,tr('Download options','下载选项'),2,0,0)
+    app.text(0,64,w,80,clip(book,96),1,0,5)
+    app.button(14,0,152,w,52,images and tr('Images: included','图片：保留') or tr('Images: text only','图片：纯文字'),0)
+    app.button(15,0,216,w,52,range and tr('Chapters: choose a range','章节：选择范围') or tr('Chapters: whole book','章节：全书'),0)
+    if savedImages>=0 and images~=(savedImages==0) then
+      app.text(0,280,w,math.max(32,h-350),tr('The new image option takes effect on the next download.','图片选项会在下次下载时生效。'),0,0,5)
+    end
+    app.button(42,0,h-56,w,48,tr('Back to book','返回图书'),0);return
+  end
+  if view=='cache' then
+    local rows=cacheRows(h)
+    cachePage=math.min(cachePage,math.max(0,math.ceil(cacheCount/rows)-1))
+    app.text(0,0,w,42,tr('Local chapters','本地章节'),2,0,0)
+    local summary=notice~='' and notice or downloaded and tr('Book ready to read','书籍可离线阅读') or tr('No readable book downloaded','尚无可阅读的离线书籍')
+    app.text(0,48,w,38,summary,0,0,5)
+    if cacheCount==0 then
+      local empty=cacheState=='invalid' and tr('The chapter index cannot be read. Download again to rebuild it; existing books are kept.','章节目录无法读取。可重新下载重建目录，现有书籍会保留。') or tr('No chapter index is cached yet. Download the book or a chapter range first.','尚未缓存章节目录，请先下载全书或选择章节范围。')
+      app.text(8,110,w-16,h-240,empty,1,0,5)
+    else
+      for i=1,rows do
+        local index=cachePage*rows+i-1
+        if index>=cacheCount then break end
+        local ok,title,cached,paid=app.system('weread.cached_chapter','',index)
+        local y=100+(i-1)*64
+        local heading=ok and (index+1)..'. '..clip(title,90) or tr('Chapter unavailable','章节无法读取')
+        app.text(0,y,w,32,heading,0,0,0)
+        local status=not ok and tr('Read error; retry or download again','读取失败，请重试或重新下载') or cached==1 and tr('Chapter file saved','章节文件已缓存') or tr('Not cached','尚未缓存')
+        if ok and paid==1 then status=status..' · '..tr('Paid chapter','付费章节') end
+        app.text(0,y+34,w,24,status,0,0,5)
+      end
+    end
+    two(50,51,h-104,w,44,tr('Previous','上一页'),tr('Next','下一页'))
+    two(42,10,h-52,w,44,tr('Back to book','返回图书'),tr('Read book','阅读书籍'));return
+  end
   if view=='detail' then
     app.box(0,8,6,100,5)
     app.text(20,4,w-24,80,book,2,0,0)
     app.text(20,88,w-24,42,author,1,0,5)
-    local meta=notice~='' and notice or publisher
+    local meta=notice~='' and notice or (downloaded and tr('Saved for offline reading','已下载，可离线阅读') or tr('Not downloaded','尚未下载'))
+    if notice=='' and publisher~='' then meta=meta..'\n'..publisher end
     if words>0 then meta=meta..'  '..words..tr(' words','字') end
     app.text(8,138,w-16,math.max(36,h-356),meta,0,0,5)
     two(10,11,h-204,w,44,tr('Read cached','阅读缓存'),tr('Download','下载'))
     two(12,13,h-152,w,44,tr('Fetch details','获取详情'),tr('Introduction','简介'))
-    two(14,15,h-100,w,44,images and tr('Images: on','含图片') or tr('Text only','纯文字'),range and tr('Chapter range','选择章节') or tr('Whole book','全书'))
+    two(16,17,h-100,w,44,tr('Download options','下载选项'),tr('Local chapters','本地章节'))
     app.button(7,0,h-48,w,44,tr('Bookshelf','返回书架'),0);return
   end
   local columns,rows,perPage=shelfSize(w,h)
@@ -137,11 +175,15 @@ local function show()
   end
   two(3,4,h-52,w,48,tr('Previous','上一页'),tr('Next','下一页'))
 end
-local function detail()
+local function detail(restoreOptions)
   local ok,title,_,_,_,by=app.system('weread.book','',selected)
   if ok then book,author=title,by end
   local have,_,wc,rate,intro,pub=app.system('weread.detail','',selected)
   words,rating,introSize,publisher=have and wc or 0,have and rate or 0,have and intro or 0,have and pub or ''
+  local cacheOk,status,haveBook,n,imagePolicy=app.system('weread.cache','',selected)
+  downloaded=cacheOk and haveBook==1;cacheState=cacheOk and status or 'invalid'
+  cacheCount=cacheOk and n or 0;savedImages=cacheOk and imagePolicy or -1
+  if restoreOptions then images=savedImages~=1;range=false end
   view='detail';show()
 end
 local function begin(which,command,argument)
@@ -166,7 +208,7 @@ local function refresh()
     local _,_,n=app.system('weread.chapter_count');chapterCount=n;first=0;last=math.max(0,n-1);chapterPage=0;choosing='first';view='chapters'
   elseif state=='done' and view=='busy' then
     app.system('power.keep_awake','off')
-    if job=='sync' then view='home' else detail();return end
+    if job=='sync' then view='home' else detail(job=='download');return end
   elseif state=='error' then
     app.system('power.keep_awake','off')
     local messages={ [2]=tr('Network error. Retry the connection.','网络异常，请重新连接。'),[3]=tr('Session expired. Sync to sign in again.','登录已过期，请同步书架重新登录。'),[6]=tr('Storage error. Check the card.','存储错误，请检查卡。'),[10]=tr('Not enough memory. Close and retry.','内存不足，请退出后重试。'),[11]=tr('This title requires a whole-book download.','这本书需要整本下载。') }
@@ -185,7 +227,7 @@ return {
     elseif id==2 then view='logout';show()
     elseif id==3 then page=math.max(0,page-1);show()
     elseif id==4 then if (page+1)*perPage<count then page=page+1 end;show()
-    elseif id>=101 and id<=112 then selected=page*perPage+id-100;detail()
+    elseif id>=101 and id<=112 then selected=page*perPage+id-100;detail(true)
     elseif id==7 then view='home';show()
     elseif id==10 then if not app.system('weread.open','',selected) then notice=tr('Download this book first','请先下载这本书');show() end
     elseif id==11 then begin('download','weread.download',(images and 'images' or 'no_images')..(range and ',range' or ''))
@@ -193,6 +235,10 @@ return {
     elseif id==13 then introOffset=0;introStack={};view='intro';show()
     elseif id==14 then images=not images;show()
     elseif id==15 then range=not range;show()
+    elseif id==16 then view='options';show()
+    elseif id==17 then cachePage=0;view='cache';show()
+    elseif id==50 then cachePage=math.max(0,cachePage-1);show()
+    elseif id==51 then if (cachePage+1)*cacheRows(h)<cacheCount then cachePage=cachePage+1 end;show()
     elseif id==30 then chapterPage=math.max(0,chapterPage-1);show()
     elseif id==31 then local rows=math.max(1,math.min(7,math.floor((h-168)/58)));if (chapterPage+1)*rows<chapterCount then chapterPage=chapterPage+1 end;show()
     elseif id>=201 and id<=207 then
@@ -217,6 +263,8 @@ return {
   end,
   on_back=function()
     if view=='busy' or view=='chapters' then app.system('weread.cancel');app.system('power.keep_awake','off') end
-    if view=='home' or view=='disclaimer' then app.exit() else view='home';show() end
+    if view=='home' or view=='disclaimer' then app.exit()
+    elseif view=='cache' or view=='options' or view=='intro' then detail()
+    else view='home';show() end
   end,
 }

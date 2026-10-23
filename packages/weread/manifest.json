@@ -1,18 +1,18 @@
 {
   "schema": 1,
   "id": "weread",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "name": {
     "en": "WeRead",
     "zh": "微信读书"
   },
   "description": {
-    "en": "Your WeRead bookshelf with QR login, book details, chapter ranges and offline reading.",
-    "zh": "微信读书书架，扫码登录、图书详情、章节选择与离线阅读。"
+    "en": "Your WeRead bookshelf with QR login, offline chapter status and per-book image preferences.",
+    "zh": "微信读书书架，扫码登录、本地章节缓存状态与每本书的图片选项。"
   },
   "license": "MIT",
   "runtime": "crossmux-lua54",
-  "api": 3,
+  "api": 5,
   "entry": "main.lua",
   "memory_bytes": 131072,
   "requires": [

@@ -157,3 +157,15 @@ VM 配额为 16–128 KiB；超过 64 KiB 必须声明 psram。具备 PSRAM 的�
 API 5 新增 `weread.cache`（index=从 1 开始的书架序号）：text=ready/missing/invalid，a=是否已有 EPUB，b=有效本地目录的章节数，c=保存的图片选项（0 含图、1 纯文字、-1 未知）。随后 `weread.cached_chapter` 按从 0 开始的章节序号返回 text=标题、a=章节文件是否存在、b=付费标记、c=字数。这两项仍受 network + reading_data 权限约束，但查询本身不联网、不下载、不删除文件；前台下载任务运行时不读取本地目录。一个章节文件存在不等于 EPUB 已生成或正文完整。
 
 这些适配器保留原有全局 AirPage 身份/微信读书账户，不提供多个第三方应用的独立账户空间。它们是受权限控制的现有服务桥接，不是通用 HTTP、MQTT 或任意文件访问接口。
+
+## API 6：前台网络电台
+
+AirTune 使用 `app.system` 的 `radio.*` 命令。需要 `network`、`sound` 授权及 `radio_audio`、`wifi`、`psram` 能力；保持唤醒另需 `keep_awake`。这些接口只在应用前台存活，退出/休眠同步停止音频和网络任务，不会启动后台 Lua。
+
+- `radio.start`：创建服务，不自动播放或联网。权限/能力不满足时返回 false。
+- `radio.play`, URL：排队收听直接 MP3 流，HTTP(S) URL 最多 511 字节。返回 true 仅表示接受请求；通过状态得知实际播放结果。未联网时打开系统 Wi-Fi 选择。
+- `radio.stop`：排队停止。直播不缓存暂停位置，恢复是重新收听。
+- `radio.volume`, `""`, 0–100：设置音量，初始 25。Mono 在板级输出设有保守增益上限。
+- `radio.status`：返回 `ok, state, volume, receivedBytes, revision, error`。state 为 `idle/connecting/buffering/playing/error`；error 为 `none/invalid_url/unsupported/network/timeout/no_memory/audio/offline`。只在状态或音量变化时重画，避免随音频字节频繁刷新墨水屏。
+
+首版只支持 MP3 直接流；AAC、HLS、M3U/PLS 播放列表不作为可播放流接受。音频不进入 Lua VM、不写 TF 卡。解码服务保持原始节目时长，将单/双声道自然采样转换到硬件的 24 kHz 单声道；不会通过改速调整节目长度。

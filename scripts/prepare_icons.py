@@ -114,7 +114,7 @@ def unpack_pixels(data: bytes, width: int, height: int, bits: int) -> list[int]:
             for y in range(height) for x in range(width)]
 
 
-def build(folder):
+def build(folder, builtin=False):
     master = folder / "icons/master.png"
     if not master.is_file(): raise ValueError(f"missing master: {master}")
     for size in (32,48,64,96,128):
@@ -134,12 +134,23 @@ def build(folder):
                 if (size==32 and mode=="plain") or (size==64 and levels<=4 and mode=="dither") or (size==96 and levels==16):
                     assets=folder/"assets";assets.mkdir(exist_ok=True)
                     (assets/f"icon-g{levels}-{size}.bin").write_bytes(data)
-    path=folder/"manifest.json";manifest=json.loads(path.read_text())
-    manifest['assets']=sorted(set(manifest.get('assets',[])) | {str(p.relative_to(folder)) for p in (folder/'assets').glob('icon-*.bin')})
-    path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+    assets = sorted(str(p.relative_to(folder)) for p in (folder / 'assets').glob('icon-*.bin'))
+    if builtin:
+        # A firmware-owned launcher entry is not an installable Lua package.
+        from build import make_icon_bundle
+        bundle = make_icon_bundle(folder, {'assets': assets})
+        if bundle is None:
+            raise ValueError('Incomplete built-in icon set')
+        (folder / 'assets/icon.csi').write_bytes(bundle)
+    else:
+        path=folder/"manifest.json";manifest=json.loads(path.read_text())
+        manifest['assets']=sorted(set(manifest.get('assets',[])) | set(assets))
+        path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
     print(f"{folder.name}: color + 2/4/16 shades; packed round trips passed")
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--builtin', action='store_true', help='Build a firmware icon bundle without a package manifest')
     parser.add_argument('packages',nargs='+',type=Path)
-    for folder in parser.parse_args().packages: build(folder)
+    args = parser.parse_args()
+    for folder in args.packages: build(folder, args.builtin)

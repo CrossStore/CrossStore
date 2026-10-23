@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "id": "airtune",
+  "version": "0.1.0",
+  "name": {
+    "en": "AirTune",
+    "zh": "AirTune 电台"
+  },
+  "description": {
+    "en": "An ink-screen radio with MP3 stations and personal favorites.",
+    "zh": "为墨水屏设计的网络收音机，预置 MP3 电台，支持自定义地址与收藏。"
+  },
+  "license": "MIT",
+  "runtime": "crossmux-lua54",
+  "api": 6,
+  "entry": "main.lua",
+  "memory_bytes": 131072,
+  "requires": [
+    "wifi",
+    "psram",
+    "radio_audio"
+  ],
+  "permissions": [
+    "network",
+    "sound",
+    "keep_awake"
+  ],
+  "status": "ready",
+  "source": "https://github.com/CrossStore/CrossStore/tree/main/packages/airtune",
+  "assets": [
+    "assets/icon-g16-32.bin",
+    "assets/icon-g16-96.bin",
+    "assets/icon-g2-32.bin",
+    "assets/icon-g2-64.bin",
+    "assets/icon-g4-32.bin",
+    "assets/icon-g4-64.bin"
+  ]
+}

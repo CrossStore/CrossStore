@@ -1,0 +1,23 @@
+{
+  "id": "appstore",
+  "kind": "firmware-launcher-icon",
+  "generator": "OpenAI imagegen",
+  "created": "2026-10-23",
+  "master_sha256": "69bf8f8a64662a7cb0aa9941e4916fe4c7d63158478fdf137c44dbda86a7be15",
+  "bundle_sha256": "e0e2d83a971098a3ac913eda8d1e386559c80672f1da189a9b18fd2b620a7853",
+  "variants": {
+    "2": [
+      32,
+      64
+    ],
+    "4": [
+      32,
+      64
+    ],
+    "16": [
+      32,
+      96
+    ]
+  },
+  "source": "Original generated storefront artwork; style references: packages/library and packages/airpage."
+}

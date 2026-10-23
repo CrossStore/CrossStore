@@ -12,7 +12,7 @@
 
 | 字段 | 当前约束 |
 | --- | --- |
-| schema / api | schema=1，应用 api 为 1–5；目录外层 api=1 保持静态格式兼容 |
+| schema / api | schema=1，应用 api 为 1–6；目录外层 api=1 保持静态格式兼容 |
 | id | `[a-z][a-z0-9_]{0,30}`，与包目录相同 |
 | version | 三段数字版本号 |
 | runtime | `crossmux-lua54` |
@@ -24,7 +24,7 @@
 | status | ready、porting、source-library；后两者不发布可安装包 |
 | license | 许可证标识，包内必须包含 LICENSE |
 
-能力名称：`wifi`、`lora`、`esp_now`、`tox`、`imu`、`touch`、`frontlight`、`rtc`、`psram`、`storage`、`buzzer`、`audio`。既包含硬件，也包含固件提供的接口。能力检查不等同于测试当前网络连通性。
+能力名称：`wifi`、`lora`、`esp_now`、`tox`、`imu`、`touch`、`frontlight`、`rtc`、`psram`、`storage`、`buzzer`、`audio`、`radio_audio`。既包含硬件，也包含固件提供的接口。能力检查不等同于测试当前网络连通性。
 
 `.csp` 是不压缩的 ZIP：清单不超过 4 KiB，Lua 源码不超过 32 KiB，整个包不超过 1 MiB、32 个文件。禁止预编译 Lua 字节码。可选资源必须列在 `assets` 并位于 `assets/` 子目录；API 2 可读取有界资源，图标按约定文件名加载。
 
@@ -41,3 +41,5 @@ API 5 配套商店展示格式有效但要求更高运行时 API 的条目，并
 API 4 增加退出/休眠前 `on_stop()` 回调，2048、五子棋、数独 0.3.0 的合并保存依赖此回调。API 5 增加只读的阅读日期/成就和微信读书本地章节查询。固件版本与应用包分别更新。
 
 安装数量与应用列表只统计合法 `<id>.csp` 文件；macOS 的 `._` 元数据、临时文件不计入 64 个安装包的上限。
+
+API 6 新增 `radio.*` 前台 MP3 电台接口。`radio_audio` 表示固件包含 MP3 播放服务且板级连续音频输出可用；它不同于只保证短音效的 `audio`。首个实现仅在实验性 PaperMono 商店固件启用，需要 PSRAM。应用同时声明 `wifi`、`psram`、`radio_audio` 和 `network`、`sound` 权限。后台播放不在此版本范围，退出或休眠停止。旧固件不认识新能力时会跳过该条目。

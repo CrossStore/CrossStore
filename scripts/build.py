@@ -10,7 +10,7 @@ import shutil
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-CAPABILITIES = {"wifi", "lora", "esp_now", "tox", "imu", "touch", "frontlight", "rtc", "psram", "storage", "buzzer", "audio"}
+CAPABILITIES = {"wifi", "lora", "esp_now", "tox", "imu", "touch", "frontlight", "rtc", "psram", "storage", "buzzer", "audio", "radio_audio"}
 PERMISSIONS = {"network", "radio", "notifications", "background", "reading_data", "wallpaper", "sound", "device_info", "files_export", "keep_awake"}
 ID = re.compile(r"[a-z][a-z0-9_]{0,30}\Z")
 VERSION = re.compile(r"(?:0|[1-9][0-9]{0,4})\.(?:0|[1-9][0-9]{0,4})\.(?:0|[1-9][0-9]{0,4})\Z")
@@ -27,8 +27,8 @@ def json_bytes(value):
 
 
 def validate(manifest, folder):
-    if manifest.get("schema") != 1 or manifest.get("api") not in (1, 2, 3, 4, 5):
-        raise ValueError("schema must be 1, API must be 1, 2, 3, 4 or 5")
+    if manifest.get("schema") != 1 or manifest.get("api") not in (1, 2, 3, 4, 5, 6):
+        raise ValueError("schema must be 1, API must be 1, 2, 3, 4, 5 or 6")
     ident = manifest.get("id", "")
     if not ID.fullmatch(ident) or ident != folder.name:
         raise ValueError("invalid package ID/directory")

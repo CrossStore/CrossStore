@@ -24,8 +24,8 @@ def json_bytes(value):
 
 
 def validate(manifest, folder):
-    if manifest.get("schema") != 1 or manifest.get("api") not in (1, 2, 3):
-        raise ValueError("schema must be 1, API must be 1, 2 or 3")
+    if manifest.get("schema") != 1 or manifest.get("api") not in (1, 2, 3, 4):
+        raise ValueError("schema must be 1, API must be 1, 2, 3 or 4")
     ident = manifest.get("id", "")
     if not ID.fullmatch(ident) or ident != folder.name:
         raise ValueError("invalid package ID/directory")

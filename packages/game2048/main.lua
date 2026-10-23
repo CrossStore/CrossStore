@@ -1,20 +1,33 @@
 local board,score,best={},0,0
 local undo_board,undo_score,confirm_reset
+local save_error=false
+local dirty,last_move,last_saved,saved_best=false,0,0,0
+local function mark_dirty()
+  local now=app.millis()
+  if not dirty then last_saved=now end
+  dirty,last_move=true,now
+  if score>best then best=score end
+end
 local function spawn()
   local empty={}
   for i=1,16 do if board[i]==0 then empty[#empty+1]=i end end
   if #empty>0 then board[empty[math.random(#empty)]]=math.random(10)==1 and 4 or 2 end
 end
 local function save()
+  if not dirty then return true end
   local data=tostring(score)
   for i=1,16 do data=data..","..board[i] end
-  app.write("game",data)
-  if score>best then best=score;app.write("best",tostring(best)) end
+  if not app.write("game",data) then return false end
+  if best>saved_best then
+    if not app.write("best",tostring(best)) then return false end
+    saved_best=best
+  end
+  dirty=false;save_error=false;last_saved=app.millis();return true
 end
 local function reset()
   score=0;undo_board=nil
   for i=1,16 do board[i]=0 end
-  spawn();spawn();save()
+  spawn();spawn();mark_dirty()
 end
 local function available()
   for i=1,16 do
@@ -23,7 +36,7 @@ local function available()
   return false
 end
 local function show()
-  app.clear();app.title("2048");app.canvas()
+  app.clear();app.title(save_error and app.tr("2048 · Save failed", "2048 · 保存失败") or "2048");app.canvas()
   local w,h=app.size()
   if confirm_reset then
     app.text(0,h*.23,w,100,app.tr("Start a new game?", "开始新的一局？"),2,1)
@@ -86,13 +99,14 @@ local function move(direction)
       board[positions[j]]=value
     end
   end
-  if changed then undo_board,undo_score=before,previous_score;spawn();save() end
+  if changed then undo_board,undo_score=before,previous_score;spawn();mark_dirty() end
   show()
 end
 return {
   on_resize=show,
   on_start=function()
     best=tonumber(app.read("best")) or 0
+    saved_best=best;last_saved=app.millis()
     local saved=app.read("game")
     local numbers,token={},""
     if saved then
@@ -102,6 +116,7 @@ return {
       end
     end
     if #numbers==17 then score=numbers[1];for i=1,16 do board[i]=numbers[i+1] end
+      best=math.max(best,score)
     else reset() end
     show()
   end,
@@ -110,12 +125,29 @@ return {
     elseif i==21 then confirm_reset=true;show()
     elseif i==22 then confirm_reset=false;show()
     elseif i==23 then confirm_reset=false;reset();show()
-    elseif i==24 and undo_board then board,score=undo_board,undo_score;undo_board=nil;save();show() end
+    elseif i==24 and undo_board then board,score=undo_board,undo_score;undo_board=nil;mark_dirty();show() end
   end,
   on_swipe=function(_,direction)
     if confirm_reset then return end
     local directions={left=1,up=2,down=3,right=4}
     if directions[direction] then move(directions[direction]) end
   end,
-  on_back=function() if confirm_reset then confirm_reset=false;show() else app.exit() end end,
+  on_tick=function()
+    if not dirty then return end
+    local now=app.millis()
+    if (now-last_move)%4294967296>=2000 or (now-last_saved)%4294967296>=10000 then
+      local had_error=save_error
+      if not save() then
+        last_move,last_saved=app.millis(),app.millis()
+        save_error=true
+      end
+      if had_error~=save_error then show() end
+    end
+  end,
+  on_stop=function() if not save() then error("progress save failed") end end,
+  on_back=function()
+    if confirm_reset then confirm_reset=false;show()
+    elseif save() then app.exit()
+    else save_error=true;show() end
+  end,
 }

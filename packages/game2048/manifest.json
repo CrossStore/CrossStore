@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "game2048",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "name": {
     "en": "2048",
     "zh": "2048"
@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "runtime": "crossmux-lua54",
-  "api": 2,
+  "api": 4,
   "entry": "main.lua",
   "memory_bytes": 65536,
   "requires": [],

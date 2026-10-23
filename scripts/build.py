@@ -17,6 +17,9 @@ VERSION = re.compile(r"(?:0|[1-9][0-9]{0,4})\.(?:0|[1-9][0-9]{0,4})\.(?:0|[1-9][
 MAX_PACKAGE = 1024 * 1024
 MAX_SCRIPT = 32768
 PAGE_SIZE = 16
+ICON_VARIANTS = ((2, 32, 128), (2, 64, 512), (4, 32, 256),
+                 (4, 64, 1024), (16, 32, 512), (16, 96, 4608))
+ICON_BUNDLE_HEADER = b"CSI1\x00\x00\x00\x00"
 
 
 def json_bytes(value):
@@ -96,10 +99,30 @@ def make_package(folder, manifest):
     return result
 
 
+def make_icon_bundle(folder, manifest):
+    """Optional fixed-size preview; absent/partial legacy icon sets stay usable."""
+    assets = manifest.get("assets", [])
+    pieces = []
+    for levels, size, expected in ICON_VARIANTS:
+        relative = f"assets/icon-g{levels}-{size}.bin"
+        if relative not in assets:
+            return None
+        source = folder / relative
+        if source.is_symlink() or not source.is_file() or not source.resolve().is_relative_to(folder.resolve()):
+            raise ValueError("icon must be a regular package asset")
+        data = source.read_bytes()
+        if len(data) != expected:
+            raise ValueError(f"invalid icon dimensions: {relative}")
+        pieces.append(data)
+    return ICON_BUNDLE_HEADER + b"".join(pieces)
+
+
 def build(packages, output):
     output.mkdir(parents=True, exist_ok=True)
     artifacts = output / "packages"
     artifacts.mkdir(exist_ok=True)
+    icons = output / "icons"
+    icons.mkdir(exist_ok=True)
     rows, migration = [], []
     seen = set()
     for path in sorted(packages.glob("*/manifest.json")):
@@ -115,7 +138,14 @@ def build(packages, output):
         digest = hashlib.sha256(archive).hexdigest()
         filename = f'{ident}-{manifest["version"]}-{digest[:16]}.csp'
         (artifacts / filename).write_bytes(archive)
-        rows.append({**manifest, "artifact": f"packages/{filename}", "bytes": len(archive), "sha256": digest})
+        row = {**manifest, "artifact": f"packages/{filename}", "bytes": len(archive), "sha256": digest}
+        bundle = make_icon_bundle(path.parent, manifest)
+        if bundle is not None:
+            icon_digest = hashlib.sha256(bundle).hexdigest()
+            icon_name = f'{ident}-{icon_digest[:16]}.csi'
+            (icons / icon_name).write_bytes(bundle)
+            row["icon"] = {"artifact": f"icons/{icon_name}", "bytes": len(bundle), "sha256": icon_digest}
+        rows.append(row)
     pages = max(1, (len(rows) + PAGE_SIZE - 1) // PAGE_SIZE)
     for page in range(pages):
         previous = "" if page == 0 else "index.json" if page == 1 else f"page-{page}.json"

@@ -246,6 +246,19 @@ local function tick(force)
   last_poll=now
   if initialized and sync() then show() end
 end
+local function adjust_volume(delta)
+  if not initialized or not app.allowed('network') or not app.allowed('sound') then
+    notice=errors.permission;return
+  end
+  sync()
+  local next_volume=math.max(0,math.min(100,volume+delta))
+  if next_volume==volume then return end
+  if save('volume',tostring(next_volume)) then
+    local ok=app.system('radio.volume','',next_volume)
+    if not ok then notice=errors.audio end
+    sync()
+  end
+end
 return {
   on_start=function()
     for i=1,12 do favorites[i]=decode(app.read(key(i))) end
@@ -258,6 +271,12 @@ return {
   on_resize=show,
   on_tick=function() tick(false) end,
   on_service=function() tick(true) end,
+  on_key=function(_,direction)
+    if view~='now' or (direction~='up' and direction~='down') then return false end
+    adjust_volume(direction=='up' and 10 or -10)
+    show()
+    return true
+  end,
   on_network=function(ok)
     if ok==0 then notice=tr('Connection cancelled. Tap Listen to retry.','连接已取消，可点收听重试') end
     if initialized then sync() end
@@ -281,15 +300,7 @@ return {
       local slot=favorite_slot(station.url)
       if slot then remove_slot=slot;view='remove' else add_favorite(station) end
     elseif id==12 or id==13 then
-      if initialized then
-        sync()
-        local next_volume=math.max(0,math.min(100,volume+(id==12 and -10 or 10)))
-        if save('volume',tostring(next_volume)) then
-          local ok=app.system('radio.volume','',next_volume)
-          if not ok then notice=errors.audio end
-          sync()
-        end
-      else notice=errors.permission end
+      adjust_volume(id==12 and -10 or 10)
     elseif id==20 then page=math.max(0,page-1)
     elseif id==21 then page=page+1
     elseif id==30 then draft_name='';draft_url='';view='custom';notice=''

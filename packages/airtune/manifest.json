@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "airtune",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": {
     "en": "AirTune",
     "zh": "AirTune 电台"
@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "runtime": "crossmux-lua54",
-  "api": 6,
+  "api": 8,
   "entry": "main.lua",
   "memory_bytes": 131072,
   "requires": [

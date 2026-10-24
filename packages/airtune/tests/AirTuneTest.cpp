@@ -20,6 +20,7 @@ class RadioHost : public crossstore::Host {
   int width = 432, height = 640, volume = 25;
   unsigned now = 0, frames = 0, writes = 0, revision = 0;
   bool zh = false, permission = true, hardware = true, failWrite = false, exited = false;
+  bool denyNetwork = false, denySound = false, failVolume = false;
   void title(const char*) override {}
   void clear() override {
     scene.clear();
@@ -30,7 +31,9 @@ class RadioHost : public crossstore::Host {
   bool row(const char*, const char*) override { return true; }
   bool capability(const char*) const override { return hardware; }
   bool chinese() const override { return zh; }
-  bool allowed(const char*) const override { return permission; }
+  bool allowed(const char* name) const override {
+    return permission && (std::strcmp(name, "network") || !denyNetwork) && (std::strcmp(name, "sound") || !denySound);
+  }
   uint32_t milliseconds() const override { return now; }
   bool read(const char* key, char* out, size_t size) override {
     const auto found = files.find(key);
@@ -91,15 +94,18 @@ class RadioHost : public crossstore::Host {
       error = "none";
       ++revision;
     } else if (!std::strcmp(command, "radio.volume")) {
-      volume = static_cast<int>(value);
-      ++revision;
+      ok = allowed("network") && allowed("sound") && !failVolume;
+      if (ok) {
+        volume = static_cast<int>(value);
+        ++revision;
+      }
     } else
       assert(!std::strcmp(command, "radio.status"));
     std::snprintf(reply.text, sizeof(reply.text), "%s", state.c_str());
     reply.a = volume;
     reply.b = 1024;
     reply.c = revision;
-    std::snprintf(reply.extra, sizeof(reply.extra), "%s", ok ? error.c_str() : "permission");
+    std::snprintf(reply.extra, sizeof(reply.extra), "%s", ok ? error.c_str() : failVolume ? "audio" : "permission");
     return ok;
   }
   bool hasText(const char* needle) const {
@@ -140,6 +146,10 @@ static void event(crossstore::Runtime& vm, const char* name, int id = 0, const c
   peak = std::max(peak, vm.peak());
 }
 static void select(crossstore::Runtime& vm, int id) { event(vm, "on_select", id); }
+static void key(crossstore::Runtime& vm, const char* direction, bool consumed) {
+  event(vm, "on_key", 0, direction);
+  assert(vm.handled() == consumed);
+}
 static void load(crossstore::Runtime& vm, const std::string& script) {
   if (!vm.load(script.data(), script.size(), 131072)) {
     std::fprintf(stderr, "load: %s (peak=%zu)\n", vm.error(), vm.peak());
@@ -157,11 +167,114 @@ static void custom(crossstore::Runtime& vm, const char* name, const char* url) {
   select(vm, 33);
 }
 
+static void volumeKeys(const std::string& script) {
+  for (bool zh : {false, true}) {
+    RadioHost h;
+    h.zh = zh;
+    crossstore::Runtime vm(h);
+    load(vm, script);
+    const auto calls = h.count("radio.volume");
+    key(vm, "up", true);
+    assert(h.volume == 60 && h.files["volume"] == "60" && h.writes == 1);
+    assert(h.count("radio.volume") == calls + 1);
+    // The firmware dispatches one callback per press. App service/tick/resize
+    // processing must not repeat that adjustment or its persistence write.
+    for (int i = 0; i < 8; ++i) {
+      h.now += 1000;
+      event(vm, "on_tick");
+      event(vm, "on_service");
+    }
+    event(vm, "on_resize");
+    assert(h.writes == 1 && h.count("radio.volume") == calls + 1);
+    key(vm, "down", true);
+    assert(h.volume == 50 && h.writes == 2 && h.count("radio.volume") == calls + 2);
+    h.failWrite = true;
+    key(vm, "up", true);
+    assert(h.writes == 3 && h.volume == 50 && h.files["volume"] == "50");
+    assert(h.count("radio.volume") == calls + 2 && h.hasText(zh ? "保存失败" : "Save failed"));
+    h.failWrite = false;
+    h.failVolume = true;
+    key(vm, "up", true);
+    assert(h.writes == 4 && h.volume == 50 && h.files["volume"] == "60");
+    assert(h.count("radio.volume") == calls + 3 && h.hasText(zh ? "扬声器" : "Speaker"));
+    h.failVolume = false;
+    key(vm, "up", true);
+    assert(h.writes == 5 && h.volume == 60);
+  }
+  for (int saved : {0, 25, 37, 95, 100}) {
+    RadioHost h;
+    h.files["volume"] = std::to_string(saved);
+    crossstore::Runtime vm(h);
+    load(vm, script);
+    key(vm, "up", true);
+    assert(h.volume == std::min(100, saved + 10));
+    assert(h.writes == (saved == 100 ? 0u : 1u));
+    for (int i = 0; i < 11; ++i) key(vm, "down", true);
+    assert(h.volume == 0);
+    const auto writes = h.writes, calls = h.count("radio.volume");
+    key(vm, "down", true);
+    select(vm, 12);  // Touch shares the same no-op boundary rule.
+    assert(h.writes == writes && h.count("radio.volume") == calls);
+    for (int i = 0; i < 11; ++i) key(vm, "up", true);
+    assert(h.volume == 100);
+    const auto upperWrites = h.writes, upperCalls = h.count("radio.volume");
+    key(vm, "up", true);
+    select(vm, 13);
+    assert(h.writes == upperWrites && h.count("radio.volume") == upperCalls);
+  }
+  for (bool denyAtStart : {false, true}) {
+    for (bool sound : {false, true}) {
+      RadioHost h;
+      h.denyNetwork = denyAtStart && !sound;
+      h.denySound = denyAtStart && sound;
+      crossstore::Runtime vm(h);
+      load(vm, script);
+      h.denyNetwork = !sound;
+      h.denySound = sound;
+      const auto writes = h.writes, calls = h.count("radio.volume");
+      key(vm, "up", true);
+      key(vm, "down", true);
+      select(vm, 13);
+      assert(h.writes == writes && h.count("radio.volume") == calls && h.hasText("Store settings"));
+    }
+  }
+  {
+    RadioHost h;
+    crossstore::Runtime vm(h);
+    load(vm, script);
+    key(vm, "left", false);
+    key(vm, "", false);
+    assert(h.writes == 0);
+    for (int page : {2, 3, 30}) {
+      select(vm, page);
+      const auto writes = h.writes, calls = h.count("radio.volume"), frames = h.frames;
+      key(vm, "up", false);
+      key(vm, "down", false);
+      assert(h.writes == writes && h.count("radio.volume") == calls && h.frames == frames);
+    }
+    select(vm, 1);
+    select(vm, 11);  // Save a favorite, then open its removal confirmation.
+    select(vm, 11);
+    assert(h.hasControl(41));
+    const auto writes = h.writes, calls = h.count("radio.volume"), frames = h.frames;
+    key(vm, "up", false);
+    key(vm, "down", false);
+    assert(h.writes == writes && h.count("radio.volume") == calls && h.frames == frames);
+    select(vm, 40);
+    key(vm, "up",
+        false);  // Returning to favorites restores default navigation too.
+    event(vm, "on_back");
+    key(vm, "up", true);
+    assert(h.volume == 60 && h.writes == writes + 1);
+  }
+}
+
 int main(int argc, char** argv) {
   assert(argc == 2);
   std::ifstream in(argv[1]);
   const std::string script{std::istreambuf_iterator<char>(in), {}};
   assert(!script.empty() && script.size() <= crossstore::MAX_SCRIPT_BYTES);
+  volumeKeys(script);
   for (const auto size :
        {std::pair{432, 640}, std::pair{640, 360}, std::pair{240, 320}, std::pair{640, 280}, std::pair{960, 400}}) {
     for (bool zh : {false, true}) {
@@ -337,7 +450,9 @@ int main(int argc, char** argv) {
     assert(h.hasText("12/12") && h.count("radio.play") == 0);
   }
   std::printf(
-      "AirTune: real runtime, bilingual five-size layout, persistence/cancel/permissions, bounded favorites, "
-      "station/volume/lifecycle passed; peak VM %zu bytes\n",
+      "AirTune: real runtime, bilingual five-size layout, "
+      "persistence/cancel/permissions, bounded favorites, "
+      "station/volume/lifecycle and API8 key consumption/fallback "
+      "passed; peak VM %zu bytes\n",
       peak);
 }

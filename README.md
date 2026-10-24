@@ -13,7 +13,7 @@ CrossMux 的实验性应用商店。设备通过 HTTP/HTTPS 获取静态 JSON �
 | calculator / game2048 | 计算器独立显示区与键盘；2048 棋盘、滑动、撤销和存档 |
 | gomoku / sudoku / minesweeper | 五子棋双尺寸棋盘与三档人机、数独三档题库/笔记/提示、扫雷长按插旗 |
 | sokoban / chinese_chess | 155 关推箱子；中国象棋合法走子与轻量人机 |
-| airtune | API 6 实验性本机 MP3 电台：六个预置台、自定义地址、12 个收藏与音量；目前仅 PaperMono 新固件启用 |
+| airtune | API 8 实验性本机 MP3 电台：六个预置台、自定义地址、12 个收藏、触摸与实体键音量；需固件提供 `radio_audio` 能力 |
 | woodfish | 木鱼计数、声音与独立静音开关；配套 S3 固件提供内置木鱼 PCM 采样 |
 | buddy / reading_stats | 保留设备对应宠物；阅读概览、月历热力图、日期书单和系统成就 |
 | rf_chat / wifi_chat / esp_chat | Lua 聊天页面、发现、气泡、重试、通知入口；使用固件通信服务 |
@@ -21,7 +21,7 @@ CrossMux 的实验性应用商店。设备通过 HTTP/HTTPS 获取静态 JSON �
 | pixel_switch / airpage / weread | 公共像素画布；扫码传图与历史图片；微信读书书架、登录、离线下载与本地章节目录 |
 | library / file_transfer / opds | 核心书库、文件传输、OPDS 的快捷入口 |
 
-AirTune 0.1.0 需要 API 6 与 `radio_audio` 连续播放能力；实机音质和长时间播放尚待验收。reading_stats 0.3.0 和 weread 0.4.0 使用 API 5 的只读统计/缓存查询。2048、五子棋、数独 0.3.0 使用 API 4：操作先保存在内存，空闲 2 秒或连续操作 10 秒后写卡，退出/休眠前补存。avatar、standby、pixel_switch、airpage 使用 API 3，其余应用使用 API 2，均需要对应版本或更新的运行时固件。
+AirTune 0.1.2 需要 API 8 与 `radio_audio` 连续播放能力；能否使用由固件能力决定。Waveshare 3.97 已能播放，实机反馈 100% 音量仍小、声音基本干净，响度验收尚未通过；PaperMono 仍偏小，当前不继续调整其蜂鸣器方案。长时间播放稳定性仍待验收。reading_stats 0.3.0 和 weread 0.4.0 使用 API 5 的只读统计/缓存查询。2048、五子棋、数独 0.3.0 使用 API 4：操作先保存在内存，空闲 2 秒或连续操作 10 秒后写卡，退出/休眠前补存。avatar、standby、pixel_switch、airpage 使用 API 3，其余应用使用 API 2，均需要对应版本或更新的运行时固件。
 
 Apps 首页只显示已安装应用，应用商店是其中一个入口；启动器网格/列表跟随用户设置。新版商店直接显示图标网格，顶部提供「全部」「已安装」和设置按钮；右下角勾表示已安装，上箭头表示有较新版本。商店网格按屏幕尺寸排布，不受启动器的列表设置影响。目录地址、硬件信息和应用权限集中在商店设置。
 

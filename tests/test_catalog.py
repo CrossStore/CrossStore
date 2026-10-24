@@ -44,6 +44,16 @@ class CatalogTest(unittest.TestCase):
                 manifest['requires'] = bad
                 with self.assertRaises(ValueError): catalog.validate(manifest, folder)
 
+    def test_api8_keys_preserve_previous_api_packages(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder, manifest = self.package(Path(temporary))
+            for version in range(1, 9):
+                manifest['api'] = version
+                self.assertEqual(catalog.validate(manifest, folder)['api'], version)
+            manifest['api'] = 9
+            with self.assertRaises(ValueError):
+                catalog.validate(manifest, folder)
+
     def test_bytecode_oversize_and_escape_fail(self):
         with tempfile.TemporaryDirectory() as temporary:
             folder, manifest = self.package(Path(temporary))

@@ -10,7 +10,7 @@ local presets={
 }
 local favorites,station={},presets[1]
 local view,page='now',0
-local state,volume,error_code='idle',25,'none'
+local state,volume,error_code='idle',50,'none'
 local initial_error=''
 local initialized,last_poll,notice=false,-1000,''
 local draft_name,draft_url,input_kind,remove_slot='','','',nil
@@ -106,6 +106,7 @@ local function initialize()
   end
   if not app.allowed('network') or not app.allowed('sound') then notice=errors.permission;initial_error=notice;initialized=false;return false end
   initialized=app.system('radio.start')
+  if initialized then initialized=app.system('radio.volume','',volume) end
   initial_error=initialized and '' or errors.permission
   if not initialized then notice=initial_error end
   return initialized
@@ -150,8 +151,8 @@ local function volume_control(x,y,w)
   app.button(13,x+w-44,y,44,44,'+',0)
   local inner=w-104
   text(x+52,y,inner,20,tr('Volume ','音量 ')..volume..'%',0,1)
-  local bar=(inner-3*6)/4
-  for i=1,4 do app.box(x+52+(i-1)*(bar+6),y+28,bar,8,volume>=i*25 and 0 or 12,2) end
+  app.box(x+52,y+28,inner,8,12,2)
+  if volume>0 then app.box(x+52,y+28,math.max(2,math.floor(inner*volume/100)),8,0,2) end
 end
 local function now_view(w,h)
   local wide=w>=600 and w>h
@@ -250,10 +251,8 @@ return {
     for i=1,12 do favorites[i]=decode(app.read(key(i))) end
     station=decode(app.read('last_station')) or presets[1]
     local saved=tonumber(app.read('volume'))
-    if initialize() then
-      if saved and saved>=0 and saved<=100 then app.system('radio.volume','',math.floor(saved)) end
-      sync()
-    end
+    if saved and saved>=0 and saved<=100 then volume=math.floor(saved) end
+    if initialize() then sync() end
     show()
   end,
   on_resize=show,
@@ -284,7 +283,7 @@ return {
     elseif id==12 or id==13 then
       if initialized then
         sync()
-        local next_volume=math.max(0,math.min(100,math.floor(volume/25+.5)*25+(id==12 and -25 or 25)))
+        local next_volume=math.max(0,math.min(100,volume+(id==12 and -10 or 10)))
         if save('volume',tostring(next_volume)) then
           local ok=app.system('radio.volume','',next_volume)
           if not ok then notice=errors.audio end

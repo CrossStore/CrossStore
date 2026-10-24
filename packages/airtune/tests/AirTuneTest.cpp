@@ -171,7 +171,7 @@ int main(int argc, char** argv) {
       h.zh = zh;
       crossstore::Runtime vm(h);
       load(vm, script);
-      assert(h.count("radio.start") == 1 && h.count("radio.play") == 0 && h.writes == 0);
+      assert(h.count("radio.start") == 1 && h.count("radio.play") == 0 && h.writes == 0 && h.volume == 50);
       h.dump("playing");
       unsigned frames = h.frames;
       for (int i = 0; i < 8; ++i) {
@@ -207,13 +207,13 @@ int main(int argc, char** argv) {
       select(vm, 10);
       assert(h.state == "connecting");
       select(vm, 13);
-      assert(h.volume == 50 && h.files["volume"] == "50");
+      assert(h.volume == 60 && h.files["volume"] == "60");
       select(vm, 12);
-      assert(h.volume == 25 && h.files["volume"] == "25");
+      assert(h.volume == 50 && h.files["volume"] == "50");
       h.failWrite = true;
       const auto volumeCalls = h.count("radio.volume");
       select(vm, 13);
-      assert(h.volume == 25 && h.count("radio.volume") == volumeCalls && h.files["volume"] == "25");
+      assert(h.volume == 50 && h.count("radio.volume") == volumeCalls && h.files["volume"] == "50");
       h.failWrite = true;
       const auto plays = h.count("radio.play");
       select(vm, 2);
@@ -273,6 +273,28 @@ int main(int argc, char** argv) {
     select(vm, 10);
     assert(h.count("radio.play") == 1);
   }
+  for (int saved : {0, 25, 37, 100}) {
+    for (bool allowedAtStart : {false, true}) {
+      RadioHost h;
+      h.files["volume"] = std::to_string(saved);
+      h.permission = allowedAtStart;
+      crossstore::Runtime vm(h);
+      load(vm, script);
+      assert(h.files["volume"] == std::to_string(saved) && h.writes == 0);
+      if (!allowedAtStart) {
+        h.permission = true;
+        select(vm, 10);
+      }
+      assert(h.volume == saved);  // Keep mute and older non-ten-step settings.
+      select(vm, 13);
+      assert(h.volume == std::min(100, saved + 10));
+      for (int i = 0; i < 11; ++i) select(vm, 12);
+      assert(h.volume == 0);
+      for (int i = 0; i < 11; ++i) select(vm, 13);
+      assert(h.volume == 100);
+      event(vm, "on_stop");
+    }
+  }
   {
     RadioHost h;
     h.hardware = false;
@@ -288,7 +310,7 @@ int main(int argc, char** argv) {
     h.files["volume"] = "10000";
     crossstore::Runtime vm(h);
     load(vm, script);
-    assert(h.volume == 25);
+    assert(h.volume == 50);
     select(vm, 10);
     assert(h.url == longUrl && h.url.size() == 511);
     h.state = "error";
